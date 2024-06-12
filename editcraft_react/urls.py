@@ -22,5 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='index.html')),
     path('copyeditor/', include('copyeditor.urls')),
-    path('hello-webpack/', TemplateView.as_view(template_name='hello_webpack.html'))
+    path('hello-react/', TemplateView.as_view(template_name='hello_react.html'))
 ]
