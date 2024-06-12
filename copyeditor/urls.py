@@ -5,5 +5,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('api', views.api, name='api'), 
+    path('database_response', views.database_response, name='database_response'), 
+    path('api_response', views.api_response, name='api_resposne'),
+    path('api_url', views.api_url, name='api_url')
 ]

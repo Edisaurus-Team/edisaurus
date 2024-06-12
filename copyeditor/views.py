@@ -5,13 +5,22 @@ from .models import Test_case
 
 # Create your views here.
 def index(request):
-    return HttpResponse("hello world")
+    return render(request, 'hello_react.html')
 
-def api(request):
+def database_response(request):
     if request.method == "GET":
         response = Test_case.objects.get(id=1).response_text
-        print(response)
-        return JsonResponse({
-            'message': response
+    
+        return render(request, 'data_response.html', {
+            "message": response
         })
         
+def api_response(request):
+    return render(request, 'api_response.html')
+
+def api_url(request):
+    response = Test_case.objects.get(id=2).response_text
+    return JsonResponse({
+        'message': response
+        }, status=200
+    )
