@@ -9,5 +9,8 @@
     <!-- <script src="../static/index-bundle.js"></script> -->
     <script src="{% static 'index-bundle.js' %}"></script>
     <h1>and from HTML!</h1>
+    {% if message %}
+      <h1>{{message}}</h1>
+    {% endif %}
   </body>
 </html>

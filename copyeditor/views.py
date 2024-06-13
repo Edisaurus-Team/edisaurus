@@ -5,7 +5,9 @@ from .models import Test_case
 
 # Create your views here.
 def index(request):
-    return render(request, 'hello_react.html')
+    return render(request, 'hello_react.html', {
+        "message": "At copyeditor index!"
+    })
 
 def database_response(request):
     if request.method == "GET":
