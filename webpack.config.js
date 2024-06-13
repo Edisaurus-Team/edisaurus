@@ -15,10 +15,19 @@ module.exports = {
         exclude: /node_modules/,
         use:{
           loader: "babel-loader",
-          options: { presets: ["@babel/preset-env", "@babel/preset-react"] }
+          options: {
+            presets: [
+              '@babel/preset-env',
+              ['@babel/preset-react', { runtime: 'automatic' }]
+            ],
+          },
         }
       },
     ]
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+    modules: [path.resolve(__dirname, 'node_modules'), 'node_modules']
   }
 };
 
