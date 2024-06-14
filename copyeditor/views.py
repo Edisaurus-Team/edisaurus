@@ -3,6 +3,8 @@ from django.http import HttpResponse, JsonResponse
 
 from .models import Test_case
 
+#test
+
 def index(request):
     return render(request, 'index.html')
     
