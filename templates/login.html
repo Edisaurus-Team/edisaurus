@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="page-content">
+        <div class="page-title">
+            <h1>CopyeditorGPT Turbo 3000!</h1>
+        </div>
+        <!-- picture -->
+        {% if message %}
+        <div class="alert alert-secondary" role="alert"><h2>{{message}}</h2></div>
+        {% endif %}
+        <form id="login-form" action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group" style="padding:20px 0px 20px;">
+                <input id="username" class="form-control" type="text" name="username" placeholder="Username">
+            </div>
+            <div class="form-group" style="padding-bottom:20px;">
+                <input id="password" class="form-control" type="password" name="password" placeholder="Password">
+            </div>
+                <input hidden name="return_to" value="{{return_to}}">
+            <input class="btn btn-dark" type="submit" value="Login">
+        </form>
+        <div id="blank-form-alert" class="alert alert-info" role="alert">
+            Please fill in both fields.
+        </div>
+        <div style="font-size:20px;">
+            <p>No account?  <a href="/signup">Sign up here!</a></p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Test_case
+from .models import User, Archive
 
-# Register your models here.
-admin.site.register(Test_case)
+
+admin.site.register(User)
+admin.site.register(Archive)
