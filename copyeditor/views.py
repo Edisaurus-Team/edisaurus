@@ -3,7 +3,6 @@ from django.http import HttpResponse, JsonResponse
 
 from .models import Test_case
 
-# Create your views here.
 def index(request):
     return render(request, 'index.html')
     
