@@ -1,17 +1,20 @@
 console.log("script loaded")
-const apiNode = document.getElementById("api-response")
 
-async function fetchData() {
-    try {
-        const response = await fetch('api_url');
-        const data = await response.json();
-        console.log(data.message);
-        apiNode.innerHTML = data.message
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-fetchData();
+//THIS FILE IS FOR REFERENCE PURPOSES
+
+// const apiNode = document.getElementById("api-response")
+
+// async function fetchData() {
+//     try {
+//         const response = await fetch('api_url');
+//         const data = await response.json();
+//         console.log(data.message);
+//         apiNode.innerHTML = data.message
+//     } catch (error) {
+//         console.error('Error:', error);
+//     }
+// }
+// fetchData();
 
 // // using fetch:
     // fetch('/copyeditor/api_url')

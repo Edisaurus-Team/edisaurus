@@ -121,9 +121,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR.joinpath('static'),
+STATIC_ROOT = BASE_DIR.joinpath('static')
 
+
+STATICFILES_DIRS = [
+    BASE_DIR.joinpath('frontend/css'),
+    BASE_DIR.joinpath('frontend/javascript')
 ]
 
 # Default primary key field type
