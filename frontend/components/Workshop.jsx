@@ -32,7 +32,7 @@ export default function Workshop () {
                     {content.map(article => (
                         <tr key={article.id}>
                             <td>{article.id}</td>
-                            <td>{article.title}</td>
+                            <a href={`/workshop/${article.id}`}><td>{article.title}</td></a>
                         </tr>
                     ))}
                 </tbody>
