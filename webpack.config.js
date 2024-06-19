@@ -1,10 +1,10 @@
 const path = require('path');
 
 module.exports = {
-  entry: './frontend/index.js',  // path to our input file
+  entry: './frontend/index.js',  // input file
   output: {
-    filename: 'index-bundle.js',  // output bundle file name
-    path: path.resolve(__dirname, './frontend/javascript'),  // path to our Django static directory
+    filename: 'index-bundle.js',
+    path: path.resolve(__dirname, './static'),  // path to our Django static directory
   },
 
   // use Babel's env and react presets to compile all .js and .jsx files that aren't inside the node_modules directory
@@ -23,6 +23,11 @@ module.exports = {
           },
         }
       },
+      // Webpack asset loader for images, etc.
+      {
+        test: /\.(png|jpe?g|gif|svg)$/,
+          type: 'asset/resource',
+      }
     ]
   },
   resolve: {

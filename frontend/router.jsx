@@ -4,6 +4,7 @@ import Root from "./Root";
 import Home from "./components/Home";
 import Workshop from "./components/Workshop";
 import Test from "./components/Test";
+import Settings from "./components/Settings";
 
 
 const router = createBrowserRouter([
@@ -17,11 +18,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/workshop",
-        element:<Workshop />,
+        element: <Workshop />,
+      },
+      {
+        path: "/settings",
+        element: <Settings />,
       },
       {
         path: "/test",
-        element:<Test />,
+        element: <Test />,
       }
     ],
   },

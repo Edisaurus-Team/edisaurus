@@ -17,7 +17,6 @@ export default function Workshop () {
         fetchData();
     }, []);
     
-    // create the table of the user's submissions. Need to set up dynamic routing so that each article title is a clickable link.
     return (
         <div>
             <h1>Workshop</h1>

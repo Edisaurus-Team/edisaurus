@@ -1,4 +1,5 @@
-// import React from "react";
+import React from "react";
+import head_image from '../images/Head.png'
 
 export default function Home() {
   return (
@@ -6,8 +7,9 @@ export default function Home() {
     <div className="page-title">
         <h1>CopyeditorGPT TURBO 3000</h1>
     </div>
-    <div className="main-image">
-        <img src="/static/images/robot_working.png"/>
+    <div className="main-image" style={{width:300}}>
+        <img src={head_image} />
+        
     </div>
     <h2 className="about-header"><a href="/uploader">Uploader</a></h2>
     <p>Get started by uploading a document.</p>
