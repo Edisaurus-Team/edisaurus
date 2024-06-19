@@ -12,6 +12,7 @@ urlpatterns = [
     path('home/', views.index, name='home'),
     path('workshop/', views.index, name='workshop'),
     path('api/', views.api, name='api'),
+    path('api/settings', views.settings, name='settings'),
     
     # all other paths are routed to react
     re_path(r"^(?:.*)?$", views.index, name='react_paths')

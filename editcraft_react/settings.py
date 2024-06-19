@@ -121,10 +121,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATIC_ROOT = BASE_DIR.joinpath('static')
+# TO BE ACTIVATED LATER
+# STATIC_ROOT = BASE_DIR.joinpath('static')
 
 
 STATICFILES_DIRS = [
+    BASE_DIR.joinpath('static'),
     BASE_DIR.joinpath('frontend/css'),
     BASE_DIR.joinpath('frontend/javascript')
 ]

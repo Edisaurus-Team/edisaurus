@@ -7,7 +7,7 @@ export default function Workshop () {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await fetch('/api');
+                const response = await fetch('/api/');
                 const data = await response.json();
                 setContent(data)
             } catch (error) {

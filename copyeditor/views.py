@@ -57,6 +57,22 @@ def logout_view(request):
 
 
 def api(request):
+    print('api serving articles')
     articles = Archive.objects.values('id', 'title')
     print(JsonResponse(list(articles), safe=False))
     return JsonResponse(list(articles), safe=False)
+
+
+def settings(request):
+    print("request recieved")
+    user = User.objects.get(username=request.user)
+    
+    if request.method == "POST":
+        user.key = request.POST["api-key"]
+        user.save()
+        return HttpResponseRedirect(reverse("settings"))
+
+    return JsonResponse( {
+        "user": user.username,
+        "key": user.key
+    })
