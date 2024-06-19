@@ -54,3 +54,9 @@ def signup(request):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
+
+
+def api(request):
+    articles = Archive.objects.values('id', 'title')
+    print(JsonResponse(list(articles), safe=False))
+    return JsonResponse(list(articles), safe=False)
