@@ -56,10 +56,8 @@ def logout_view(request):
     return HttpResponseRedirect(reverse("index"))
 
 
-def api(request):
-    print('api serving articles')
+def get_table(request):
     articles = Archive.objects.values('id', 'title')
-    print(JsonResponse(list(articles), safe=False))
     return JsonResponse(list(articles), safe=False)
 
 
@@ -75,4 +73,12 @@ def settings(request):
     return JsonResponse( {
         "user": user.username,
         "key": user.key
+    })
+
+
+def get_article(request, id):
+    article = Archive.objects.get(id=id)
+    return JsonResponse({
+        "articleText": article.original_text,
+        "editedText": article.edited_text
     })

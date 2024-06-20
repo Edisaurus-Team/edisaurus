@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-export default function Workshop () {
+export default function Table () {
     
     const[content, setContent] = useState([]);
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await fetch('/api/');
+                const response = await fetch('/api/get_table');
                 const data = await response.json();
                 setContent(data)
             } catch (error) {
@@ -19,7 +19,7 @@ export default function Workshop () {
     
     return (
         <div>
-            <h1>Workshop</h1>
+            <h1>Workshop Dashboard</h1>
             <table>
                 <thead>
                 <tr>
@@ -31,7 +31,9 @@ export default function Workshop () {
                     {content.map(article => (
                         <tr key={article.id}>
                             <td>{article.id}</td>
-                            <a href={`/workshop/${article.id}`}><td>{article.title}</td></a>
+                            <a href={`/workshop/${article.id}`}>
+                                <td>{article.title}</td>
+                            </a>
                         </tr>
                     ))}
                 </tbody>

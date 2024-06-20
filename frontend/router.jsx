@@ -2,9 +2,10 @@ import { createBrowserRouter } from "react-router-dom";
 // import React from "react"
 import Root from "./Root";
 import Home from "./components/Home";
-import Workshop from "./components/Workshop";
+import WorkshopTable from "./components/WorkshopTable";
 import Test from "./components/Test";
 import Settings from "./components/Settings";
+import Article from "./components/Article";
 
 
 const router = createBrowserRouter([
@@ -18,7 +19,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/workshop",
-        element: <Workshop />,
+        element: <WorkshopTable />,
+      },
+      {
+        path: "workshop/:id",
+        element: <Article />
       },
       {
         path: "/settings",
