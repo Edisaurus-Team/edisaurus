@@ -7,7 +7,7 @@ export default function Settings() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await fetch('/api/settings');
+                const response = await fetch('/api/settings/');
                 const data = await response.json();
                 console.log(data)
                 setContent(data)

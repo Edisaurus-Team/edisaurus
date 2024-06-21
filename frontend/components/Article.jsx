@@ -23,8 +23,7 @@ export default function Article() {
 
     return (
         <div>
-            <h1>{content.articleText}</h1>
-            <h2>{content.editedText}</h2>
+            <p dangerouslySetInnerHTML={{ __html: content.htmlChanges }}></p>
         </div>
     )
 };

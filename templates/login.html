@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Edisaurus!</title>
 </head>
 <body>
     <div class="page-content">
         <div class="page-title">
-            <h1>CopyeditorGPT Turbo 3000!</h1>
+            <h1>Edisaurus!</h1>
         </div>
         <!-- picture -->
         {% if message %}
@@ -22,14 +22,13 @@
             <div class="form-group" style="padding-bottom:20px;">
                 <input id="password" class="form-control" type="password" name="password" placeholder="Password">
             </div>
-                <input hidden name="return_to" value="{{return_to}}">
             <input class="btn btn-dark" type="submit" value="Login">
         </form>
         <div id="blank-form-alert" class="alert alert-info" role="alert">
             Please fill in both fields.
         </div>
         <div style="font-size:20px;">
-            <p>No account?  <a href="/signup">Sign up here!</a></p>
+            <p>No account?  <a href="/signup/">Sign up here!</a></p>
         </div>
     </div>
 </body>

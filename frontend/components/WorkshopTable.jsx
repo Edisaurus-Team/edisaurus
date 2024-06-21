@@ -7,7 +7,7 @@ export default function Table () {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await fetch('/api/get_table');
+                const response = await fetch('/api/get_table/');
                 const data = await response.json();
                 setContent(data)
             } catch (error) {

@@ -13,3 +13,4 @@ class Archive(models.Model):
     original_text = models.TextField(default="")
     edited_text = models.TextField(default="")
     final_text = models.TextField(default="", blank=True)
+    diffs = models.TextField(default="")

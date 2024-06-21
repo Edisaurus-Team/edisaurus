@@ -2,11 +2,11 @@ import { createBrowserRouter } from "react-router-dom";
 // import React from "react"
 import Root from "./Root";
 import Home from "./components/Home";
+import About from "./components/About";
 import WorkshopTable from "./components/WorkshopTable";
-import Test from "./components/Test";
 import Settings from "./components/Settings";
 import Article from "./components/Article";
-
+import Uploader from "./components/Uploader";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +16,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/about",
+        element: <About />
       },
       {
         path: "/workshop",
@@ -30,8 +34,8 @@ const router = createBrowserRouter([
         element: <Settings />,
       },
       {
-        path: "/test",
-        element: <Test />,
+        path: "/uploader",
+        element: <Uploader />,
       }
     ],
   },
