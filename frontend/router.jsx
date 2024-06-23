@@ -5,6 +5,7 @@ import Home from "./components/Home";
 import About from "./components/About";
 import WorkshopTable from "./components/WorkshopTable";
 import Settings from "./components/Settings";
+import ArticlePanel from "./components/ArticlePanel";
 import Article from "./components/Article";
 import Uploader from "./components/Uploader";
 
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
       },
       {
         path: "workshop/:id",
-        element: <Article />
+        element: <Article />,
       },
       {
         path: "/settings",
