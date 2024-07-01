@@ -24,7 +24,7 @@ export default function Article() {
 
     return (
         <div>
-            <ArticlePanel />
+            
             <p dangerouslySetInnerHTML={{ __html: content.htmlChanges }}></p>
         </div>
     )
