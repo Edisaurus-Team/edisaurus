@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import ArticlePanel from './ArticlePanel'
+import styles from '../css/articleStyles.css'
 
 
 export default function Article() {
@@ -24,7 +25,7 @@ export default function Article() {
 
     return (
         <div>
-            
+            <h1 className={styles.headline}> hello </h1>
             <p dangerouslySetInnerHTML={{ __html: content.htmlChanges }}></p>
         </div>
     )

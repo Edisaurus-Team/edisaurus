@@ -23,6 +23,22 @@ module.exports = {
           },
         }
       },
+      // Webpack CSS loader
+      {
+        test: /\.css$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader',
+            query: {
+              modules: true
+            }
+          }
+        ],
+      },
       // Webpack asset loader for images, etc.
       {
         test: /\.(png|jpe?g|gif|svg)$/,
@@ -35,7 +51,3 @@ module.exports = {
     modules: [path.resolve(__dirname, 'node_modules'), 'node_modules']
   }
 };
-
-
-
-
