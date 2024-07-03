@@ -1,19 +1,38 @@
 // import React from "react";
-import home_thumbnail from '../images/home_thumbnail.png'
+import home_thumbnail from "../images/home_thumbnail.png";
+import { NavLink } from "react-router-dom";
 
 export default function Navbar() {
   return (
     <nav>
-        <a href="/"><img src={home_thumbnail} style={{width:50}}/></a>
-        <ul>
-            <li><a href="/uploader/">Uploader</a></li>
-            <li><a href="/workshop/">Workshop</a></li>
-            <li><a href="/about/">About</a></li>
-        </ul>
-        <div className="navbar-buttons">
-            <a href="/settings/">Settings</a>
-            <a href="/logout/"><button className="btn btn-dark">Logout</button></a>
-        </div>
-    </nav>   
-  )
+      <a href="/">
+        <img src={home_thumbnail} style={{ width: 50 }} />
+      </a>
+      <div className="navPages">
+        <li>
+          <NavLink className="navItem" to="/uploader/">
+            Uploader
+          </NavLink>
+        </li>
+        <li>
+          <NavLink className="navItem" to="/workshop/">
+            Workshop
+          </NavLink>
+        </li>
+        <li>
+          <NavLink className="navItem" to="/about/">
+            About
+          </NavLink>
+        </li>
+      </div>
+      <div className="navAccount">
+        <NavLink className="accountItem" to="/settings/">
+          Settings
+        </NavLink>
+        <NavLink className="accountItem" to="/logout/">
+          Logout
+        </NavLink>
+      </div>
+    </nav>
+  );
 }
