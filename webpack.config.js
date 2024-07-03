@@ -27,17 +27,7 @@ module.exports = {
       {
         test: /\.css$/,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader',
-            query: {
-              modules: true
-            }
-          }
-        ],
+        use: ['style-loader', 'css-loader'],
       },
       // Webpack asset loader for images, etc.
       {
