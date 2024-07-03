@@ -127,7 +127,6 @@ STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
     BASE_DIR.joinpath('static'),
-    BASE_DIR.joinpath('frontend/css'),
     BASE_DIR.joinpath('frontend/javascript')
 ]
 
