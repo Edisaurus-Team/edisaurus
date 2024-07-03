@@ -21,7 +21,7 @@ nav {
 }
 
 .navPages {
-    display: flex;
+  display: flex;
   list-style-type: none;
 }
 
@@ -30,17 +30,20 @@ nav {
   flex-direction: row;
 }
 
-.accountItem, .navItem {
-    margin: 0rem .5rem 0rem .5rem;
-  padding: .5rem;
+.accountItem,
+.navItem {
+  margin: 0rem 0.5rem 0rem 0.5rem;
+  padding: 0.5rem;
   text-decoration: none;
+  color: inherit;
 }
 
-.accountItem:hover, .navItem:hover {
-    border: 1px solid black;
+.accountItem:hover,
+.navItem:hover {
+  border: 1px solid black;
 }
 
-
+/* end navbar styling */
 
 body {
   background-color: rgb(241, 241, 241) !important;
