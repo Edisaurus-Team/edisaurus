@@ -1,6 +1,6 @@
 import re
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotFound
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
@@ -60,7 +60,6 @@ def get_table(request):
 
 
 def settings(request):
-    print("request recieved")
     user = User.objects.get(username=request.user)
     
     if request.method == "POST":
@@ -90,6 +89,20 @@ def uploader(request):
         save_in_archive.save()
 
         return HttpResponseRedirect(f"/workshop/{save_in_archive.id}")
+
+
+@csrf_exempt
+# @cache_control(no_cache=True, must_revalidate=True, no_store=True)
+def workshop_api(request, id):
+    
+    # delete article, sent from WorkshopTable.jsx
+    if request.method == "DELETE":
+        try:
+            article = Archive.objects.get(id=id)
+            article.delete()
+            return JsonResponse({"message": "Article deleted"}, status=204)
+        except Archive.DoesNotExist:
+            return HttpResponseNotFound("Article not found")
 
 
 def get_article(request, id):
