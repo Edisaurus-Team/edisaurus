@@ -1,209 +1,235 @@
 * {
-    font-family:Georgia, 'Times New Roman', Times, serif
+  font-family: Georgia, "Times New Roman", Times, serif;
+
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  border: 0px solid green;
 }
+
+/* navbar styling */
 
 nav {
-    padding-top:10px;
-    height:50px;
-    background-color:rgb(241, 241, 241);
-    margin-inline:10%;
-    justify-content:space-between;
-    display:flex;
-    margin-bottom:25px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(241, 241, 241);
+  padding-bottom: 1rem;
+  margin: 1rem 1rem 2rem 1rem;
+  border-bottom: 1px solid gray;
 }
-ul {
-    list-style-type:none;
-    li {
-        padding:0px 20px 0px;
-        display:inline;
-    }
-  }
+
+.navPages {
+  display: flex;
+  list-style-type: none;
+}
+
+.navAccount {
+  display: flex;
+  flex-direction: row;
+}
+
+.accountItem,
+.navItem {
+  margin: 0rem 0.5rem 0rem 0.5rem;
+  padding: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.accountItem:hover,
+.navItem:hover {
+  border: 1px solid black;
+}
+
+/* end navbar styling */
 
 body {
-    background-color:rgb(241, 241, 241) !important;
+  background-color: rgb(241, 241, 241) !important;
 }
 
 .page-title {
-    text-align:center;
-    margin-bottom:50px;
+  text-align: center;
+  margin-bottom: 50px;
 }
 
-.page-content{
-    background-color:rgb(241, 241, 241);
-    margin-inline:10%;
-    margin-bottom:50px;
+.page-content {
+  background-color: rgb(241, 241, 241);
+  margin-inline: 10%;
+  margin-bottom: 50px;
 }
 
 /* Login */
 .form-group {
-    padding-top:10px;
-    padding-bottom:10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 /* also used in settings */
 .alert-info {
-    display:none;
-    margin-top:20px;
+  display: none;
+  margin-top: 20px;
 }
 
 p {
-    font-size:20px;
+  font-size: 20px;
 }
 
 .inline-content {
-    display:inline;
-    vertical-align:middle; /* Optional:Align vertically if needed */
+  display: inline;
+  vertical-align: middle; /* Optional:Align vertically if needed */
 }
 
 /* About */
 .about-header {
-    padding-top:50px;
+  padding-top: 50px;
 }
 
 /* Workshop */
 .article-list-view {
-    margin-inline:10%;
+  margin-inline: 10%;
 }
 
 tr {
-    font-size:20px;
-    width:100%;
+  font-size: 20px;
+  width: 100%;
 }
 tr:hover {
-    background:rgb(221, 221, 221);
-    #edit-icon {
-        visibility:visible;
-    }
+  background: rgb(221, 221, 221);
+  #edit-icon {
+    visibility: visible;
+  }
 }
 .icon {
-    height:30px;
-    cursor:pointer;
+  height: 30px;
+  cursor: pointer;
 }
 
 #edit-icon {
-    visibility:hidden;
-    height:25px;
-    padding-left:2vw;
+  visibility: hidden;
+  height: 25px;
+  padding-left: 2vw;
 }
 .title-edit-input {
-    margin-right:2vw;
-    height:25px;
-    width:450px;
+  margin-right: 2vw;
+  height: 25px;
+  width: 450px;
 }
 
 /* Workshop Page Render */
 .render-icon {
-    height:50px;
-    cursor:pointer;
+  height: 50px;
+  cursor: pointer;
 }
 
 .jump-buttons {
-    cursor:pointer;
+  cursor: pointer;
 }
 
 .exit-buttons {
-    position:fixed;
-    top:10px;
-    right:10px;
-    display:flex;
-    align-items:center;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .topleft-panel {
-    position:fixed;
-    top:10px;
+  position: fixed;
+  top: 10px;
 }
 
 .icon-wrapper {
-    margin-right:1vw;
+  margin-right: 1vw;
 }
 
-.icon-wrapper:hover{
-    .tool-tip {
-        visibility:visible;
-        overflow:visible;
-    }
+.icon-wrapper:hover {
+  .tool-tip {
+    visibility: visible;
+    overflow: visible;
+  }
 }
 
 #reject-remaining-wrapper:hover {
-    filter:hue-rotate(120deg);
+  filter: hue-rotate(120deg);
 }
 
 #accept-remaining-wrapper:hover {
-    filter:hue-rotate(-90deg);
+  filter: hue-rotate(-90deg);
 }
 
 #review-wrapper:hover {
-    filter:hue-rotate(60deg);
+  filter: hue-rotate(60deg);
 }
 
 #save-wrapper:hover {
-    filter:hue-rotate(30deg);
+  filter: hue-rotate(30deg);
 }
 
 #exit-wrapper:hover {
-    filter:hue-rotate(120deg)
+  filter: hue-rotate(120deg);
 }
 
 .article {
-    padding-top:20px;
-    margin-inline:10%;
+  padding-top: 20px;
+  margin-inline: 10%;
 }
 
-.workshop-panel{
-    position:fixed;
-    top:0px;
-    width:100%;
-    background:rgb(200, 200, 200);
-    border-bottom-style:solid;
-    border-color:black;
-    border-width:2px;
+.workshop-panel {
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  background: rgb(200, 200, 200);
+  border-bottom-style: solid;
+  border-color: black;
+  border-width: 2px;
 }
 .workshop-accept-buttons {
-    margin-top:25px;
-    text-align:center;
+  margin-top: 25px;
+  text-align: center;
 }
 
 .tool-tip {
-    width:fit-content;
-    color:white;
-    padding:3px;
-    border-radius:3px;
-    background:rgb(36, 35, 35);
-    visibility:hidden;
-    position:absolute;
-    top:50px;
-    filter:opacity(85%)
+  width: fit-content;
+  color: white;
+  padding: 3px;
+  border-radius: 3px;
+  background: rgb(36, 35, 35);
+  visibility: hidden;
+  position: absolute;
+  top: 50px;
+  filter: opacity(85%);
 }
 
 ins {
-    background:rgb(150, 255, 150);
+  background: rgb(150, 255, 150);
 }
 ins:hover {
-    background:rgb(50, 255, 50);
-    cursor:pointer;
+  background: rgb(50, 255, 50);
+  cursor: pointer;
 }
 del {
-    background:rgb(255, 150, 150);
+  background: rgb(255, 150, 150);
 }
 del:hover {
-    background:rgb(255, 50, 50);
-    cursor:pointer;
+  background: rgb(255, 50, 50);
+  cursor: pointer;
 }
 
 .del-selected {
-    background:rgb(255, 50, 50);
+  background: rgb(255, 50, 50);
 }
 
 .ins-selected {
-    background:rgb(50, 255, 50);
+  background: rgb(50, 255, 50);
 }
 
 /* Settings */
 .api-key-display {
-    display:flex;
-    justify-content:space-between;   
+  display: flex;
+  justify-content: space-between;
 }
 
 .api-key-form {
-    display:none;
+  display: none;
 }
