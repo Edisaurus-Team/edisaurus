@@ -26,6 +26,8 @@ nav {
 
 .navAccount {
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: row;
 }
 
@@ -47,10 +49,23 @@ nav {
   background-color: darkgray;
 }
 
+@media (max-width: 375px) {
+  nav {
+    flex-direction: column;
+  }
+  .navPages {
+    margin: 1rem;
+  }
+.accountItem {
+  font-size: 12px;
+  background-color: transparent;
+}
+}
+
 /* end navbar styling */
 
 body {
-  background: linear-gradient(rgb(242, 239, 239), rgb(196, 195, 195));
+  background: linear-gradient(rgb(242, 239, 239), rgb(215, 214, 214));
 }
 
 .page-title {
