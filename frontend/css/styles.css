@@ -51,10 +51,12 @@ body {
 
 .page-title {
   text-align: center;
-  margin-bottom: 50px;
 }
 
 .page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: rgb(241, 241, 241);
   margin-inline: 10%;
   margin-bottom: 50px;
@@ -81,8 +83,22 @@ p {
 }
 
 /* About */
-.about-header {
-  padding-top: 50px;
+.text-center {
+  padding: 1rem 0rem 1rem 0rem;
+}
+
+.about-container {
+  align-items: center;
+  border: 1px solid lightgrey;
+  max-width: 480px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.about-paragraph {
+  color: #333333;
+  font-size: 18px;
+  padding: 0rem 1rem 1rem 1rem;
 }
 
 /* Workshop */
