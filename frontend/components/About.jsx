@@ -4,11 +4,11 @@ export default function () {
   return (
     <main class="page-content">
       <header className="page-title">
-        <h1>About</h1>
+        <h2 className="page-name">About</h2>
       </header>
       <article>
         <section className="about-container">
-          <h3 className="text-center">Welcome to CopyeditorGPT Turbo 3000!</h3>
+          <h4 className="text-center">Welcome to CopyeditorGPT Turbo 3000!</h4>
           <p className="about-paragraph">
             This is the only tool you'll need to proofread your manuscript, blog
             article, essay, or any other written work. Just upload a Word
@@ -20,7 +20,7 @@ export default function () {
           </p>
         </section>
         <section className="about-container">
-          <h3 className="text-center">How to Use</h3>
+          <h4 className="text-center">How to Use</h4>
           <p className="about-paragraph">
             You will need your own OpenAI API key to use this tool. If you don't
             have an API key, head to{" "}
@@ -39,7 +39,7 @@ export default function () {
           </p>
         </section>
         <section className="about-container">
-          <h3 className="text-center">Review Your Results</h3>
+          <h4 className="text-center">Review Your Results</h4>
           <p className="about-paragraph">
             Every change made to the text is marked by a set of <del>red </del>
             and <ins>green </ins> highlights. You may click on the{" "}
