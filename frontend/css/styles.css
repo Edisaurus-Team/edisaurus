@@ -1,5 +1,5 @@
 * {
-  font-family: Georgia, "Times New Roman", Times, serif;
+  font-family: "Roboto", sans-serif;
 
   padding: 0;
   margin: 0;
@@ -14,10 +14,9 @@ nav {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  background-color: rgb(241, 241, 241);
-  padding-bottom: 1rem;
-  margin: 1rem 1rem 2rem 1rem;
-  border-bottom: 1px solid gray;
+  background: transparent;
+  padding: 1rem;
+  border-bottom: 1px solid darkgrey;
 }
 
 .navPages {
@@ -27,37 +26,58 @@ nav {
 
 .navAccount {
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: row;
 }
 
 .accountItem,
 .navItem {
+  font-weight: 300;
   margin: 0rem 0.5rem 0rem 0.5rem;
   padding: 0.5rem;
   text-decoration: none;
   color: inherit;
+  border-radius: 5px;
+  background-color: white;
+  border: 1px solid lightgray;
 }
 
 .accountItem:hover,
 .navItem:hover {
-  border: 1px solid black;
+  color: white;
+  background-color: darkgray;
+}
+
+@media (max-width: 375px) {
+  nav {
+    flex-direction: column;
+  }
+  .navPages {
+    margin: 1rem;
+  }
+.accountItem {
+  font-size: 12px;
+  background-color: transparent;
+}
 }
 
 /* end navbar styling */
 
 body {
-  background-color: rgb(241, 241, 241) !important;
+  background: linear-gradient(rgb(242, 239, 239), rgb(215, 214, 214));
 }
 
 .page-title {
   text-align: center;
-  margin-bottom: 50px;
 }
 
 .page-content {
-  background-color: rgb(241, 241, 241);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-inline: 10%;
-  margin-bottom: 50px;
+  margin: 1rem 0rem 2rem 0rem;
 }
 
 /* Login */
@@ -81,8 +101,29 @@ p {
 }
 
 /* About */
-.about-header {
-  padding-top: 50px;
+
+.page-name {
+  font-weight: 400;
+}
+
+.text-center {
+  padding: 1rem;
+  font-weight: 400;
+}
+
+.about-container {
+  align-items: center;
+  border: 1px solid darkgray;
+  max-width: 480px;
+  border-radius: 8px;
+  margin: 0rem 1rem 1rem 1rem;
+}
+
+.about-paragraph {
+  color: #333333;
+  font-size: 18px;
+  font-weight: 300;
+  padding: 0rem 1rem 1rem 1rem;
 }
 
 /* Workshop */
