@@ -6,7 +6,7 @@ export default function Uploader() {
             <div className="page-title">
                 <h1>Uploader</h1>
             </div>
-            <form id="upload-form" action="/api/uploader/" method="post" enctype="multipart/form-data">
+            <form id="upload-form" action="/api/uploader/" method="post" encType="multipart/form-data">
                 <h3>Paste your text below</h3>
                 <div className="form-group">
                     <textarea id="upload-text" className="form-control" name="text_box" rows="5"></textarea>
