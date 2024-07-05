@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
 
 export default function Table () {
     
@@ -16,7 +17,7 @@ export default function Table () {
         }
         fetchData();
     }, []);
-    
+    console.log(content)
     return (
         <div>
             <h1>Workshop Dashboard</h1>
@@ -31,9 +32,9 @@ export default function Table () {
                     {content.map(article => (
                         <tr key={article.id}>
                             <td>{article.id}</td>
-                            <a href={`/workshop/${article.id}`}>
-                                <td>{article.title}</td>
-                            </a>
+                            <td>
+                                <NavLink to={`/workshop/${article.id}`}>{article.title}</NavLink>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
