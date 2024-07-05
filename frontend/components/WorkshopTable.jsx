@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import trashIcon from "../images/trash_icon.png";
-import { NavLink } from 'react-router-dom';
 
 export default function Table () {
 
