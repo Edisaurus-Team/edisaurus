@@ -1,17 +1,23 @@
 import re
+import os
+
+from dotenv import load_dotenv
 from openai import OpenAI
 from openai import AuthenticationError
 from diff_match_patch import diff_match_patch
 from json import dumps, loads
 
-def run_editor(submit_text, key):
+def run_editor(submit_text):
     """
     Called in 'uploader' in 'views.py'
     """
-
+    load_dotenv()
+    OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+    print("*************")
+    print(OPENAI_API_KEY)
     #OpenAI API call
     client = OpenAI()
-    client.api_key = key
+
     prompt = "You are a professional copy editor who fixes typos and grammatical mistakes in text. You follow MLA style for making corrections. You make MINIMAL edits to the voice or style of the prose, only correcting when there are obvious errors."
     edited_text = ""
     try:

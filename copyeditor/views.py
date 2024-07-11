@@ -1,11 +1,12 @@
 import re
+import os
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotFound
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
-from .models import User, Archive
 
+from .models import User, Archive
 from .functions import run_editor, compare_text, create_html
 
 @csrf_exempt
@@ -61,25 +62,18 @@ def get_table(request):
 
 def settings(request):
     user = User.objects.get(username=request.user)
-    
-    if request.method == "POST":
-        user.key = request.POST["api-key"]
-        user.save()
-        return HttpResponseRedirect(reverse("settings"))
 
     return JsonResponse( {
         "user": user.username,
-        "key": user.key
     })
 
 @csrf_exempt
 def uploader(request):
     if request.method == "POST":
         submit_text = request.POST["text_box"].strip()
-        key = User.objects.get(username=request.user).key
 
         # magic begins here :)
-        edited_text = run_editor(submit_text, key)
+        edited_text = run_editor(submit_text)
 
         # # create title from first 50 characters, or all that comes before a line break
         title = edited_text[:50].split("\n")[0]
