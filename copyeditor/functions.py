@@ -13,8 +13,6 @@ def run_editor(submit_text):
     """
     load_dotenv()
     OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-    print("*************")
-    print(OPENAI_API_KEY)
     #OpenAI API call
     client = OpenAI()
 

@@ -1,4 +1,5 @@
 // import React from "react";
+import "../css/uploaderStyle.css"
 
 export default function Uploader() {
     return (
@@ -9,7 +10,7 @@ export default function Uploader() {
             <form id="upload-form" action="/api/uploader/" method="post" encType="multipart/form-data">
                 <h3>Paste your text below</h3>
                 <div className="form-group">
-                    <textarea id="upload-text" className="form-control" name="text_box" rows="5"></textarea>
+                    <textarea id="upload-text" className="uploadTextBox"></textarea>
                 </div>
                 <div>
                     <button className="btn btn-dark" type="submit" name="upload" value="upload_text">Submit text</button>    
