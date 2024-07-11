@@ -1,3 +1,5 @@
+//THIS FILE IS NOT IN USE. ONLY USE FOR REFERENCE
+
 const articleId = document.querySelector(".page-title").getAttribute("article-id");
 
 // selected Delete and Insert nodes default to null
