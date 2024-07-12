@@ -1,9 +1,4 @@
-import re
-import os, json
-
-from dotenv import load_dotenv
-from openai import OpenAI
-from openai import AuthenticationError
+import json
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotFound, StreamingHttpResponse
