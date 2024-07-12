@@ -22,7 +22,6 @@ export default function Table () {
 
     
     function trashIconEvent(id) {
-        console.log(`Delete icon clicked: ${id}`);
         fetch('/api/workshop_api/' + id, {
             method: 'DELETE',
         })

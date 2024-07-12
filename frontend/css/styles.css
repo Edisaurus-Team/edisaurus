@@ -68,6 +68,10 @@ body {
   background: linear-gradient(rgb(242, 239, 239), rgb(215, 214, 214));
 }
 
+.articleContent {
+  max-width: 700px;
+}
+
 .page-title {
   text-align: center;
 }

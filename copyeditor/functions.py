@@ -1,42 +1,30 @@
 import re
-import os
 
 from dotenv import load_dotenv
 from openai import OpenAI
-from openai import AuthenticationError
 from diff_match_patch import diff_match_patch
 from json import dumps, loads
 
-def run_editor(submit_text):
+def openai_call(prompt, submit_text):
     """
     Called in 'uploader' in 'views.py'
     """
     load_dotenv()
-    OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-    #OpenAI API call
     client = OpenAI()
 
-    prompt = "You are a professional copy editor who fixes typos and grammatical mistakes in text. You follow MLA style for making corrections. You make MINIMAL edits to the voice or style of the prose, only correcting when there are obvious errors."
-    edited_text = ""
-    try:
-        completion = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": prompt},
-                {"role": "user", "content": submit_text}
-            ],
-            stream=True
-        )
+    completion = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": submit_text}
+        ],
+        stream=True
+    )
 
-        for chunk in completion:
-            if chunk.choices[0].delta.content is not None:
-                print(chunk.choices[0].delta.content, end="")
-                edited_text += chunk.choices[0].delta.content
-        #invalid key error
-    except AuthenticationError:
-        return "key invalid"
-
-    return edited_text
+    for chunk in completion:
+        content = chunk.choices[0].delta.content
+        if content:
+            yield content
 
 
 def compare_text(original_text, edited_text):

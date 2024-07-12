@@ -1,13 +1,18 @@
 import re
-import os
+import os, json
+
+from dotenv import load_dotenv
+from openai import OpenAI
+from openai import AuthenticationError
+
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotFound, StreamingHttpResponse
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import User, Archive
-from .functions import run_editor, compare_text, create_html
+from .functions import openai_call, compare_text, create_html
 
 @csrf_exempt
 def index(request):
@@ -70,10 +75,10 @@ def settings(request):
 @csrf_exempt
 def uploader(request):
     if request.method == "POST":
-        submit_text = request.POST["text_box"].strip()
 
-        # magic begins here :)
-        edited_text = run_editor(submit_text)
+        data = json.loads(request.body.decode('utf-8'))
+        submit_text = data.get('submit_text', '')
+        edited_text = data.get('edited_text', '')     
 
         # # create title from first 50 characters, or all that comes before a line break
         title = edited_text[:50].split("\n")[0]
@@ -82,8 +87,22 @@ def uploader(request):
         save_in_archive = Archive(user=request.user, title=title, original_text=submit_text, edited_text=edited_text, diffs=diffs)
         save_in_archive.save()
 
-        return HttpResponseRedirect(f"/workshop/{save_in_archive.id}")
+        return JsonResponse({"articleId": save_in_archive.id})
 
+
+@csrf_exempt
+def stream_response(request):
+    if request.method == "POST":   
+        
+        data = json.loads(request.body.decode('utf-8'))
+        prompt = "You are a professional copy editor who fixes typos and grammatical mistakes in text. You follow MLA style for making corrections. You make MINIMAL edits to the voice or style of the prose, only correcting when there are obvious errors."
+        submit_text = data.get('submit_text', '')        
+
+        # magic begins here :)
+        response = StreamingHttpResponse(openai_call(prompt, submit_text), content_type='text/plain')
+        response['Cache-Control'] = 'no-cache'
+        
+        return response
 
 @csrf_exempt
 # @cache_control(no_cache=True, must_revalidate=True, no_store=True)

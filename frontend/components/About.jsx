@@ -2,7 +2,7 @@
 
 export default function () {
   return (
-    <main class="page-content">
+    <main className="page-content">
       <header className="page-title">
         <h2 className="page-name">About</h2>
       </header>

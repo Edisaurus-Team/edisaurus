@@ -15,7 +15,6 @@ export default function Article() {
                 const response = await fetch('/api/get_article/' + id);
                 const data = await response.json();
                 setContent(data)
-                console.log(data)
             } catch (error) {
                 console.error('Error:', error);
             }
@@ -26,7 +25,9 @@ export default function Article() {
     return (
         <div className="page-content">
             <h1 className="headline"> Hello (this is page-specific CSS) </h1>
-            <p dangerouslySetInnerHTML={{ __html: content.htmlChanges }}></p>
+            <div className="articleContent">
+                <p dangerouslySetInnerHTML={{ __html: content.htmlChanges }}></p>
+            </div>
         </div>
     )
 };
