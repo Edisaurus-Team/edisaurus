@@ -54,7 +54,7 @@ export default function Table () {
             <td>
               <span onClick={() => trashIconEvent(article.id)} id={article.id} className="trash-wrapper">
                 
-                <FaRegTrashCan />
+                <FaRegTrashCan className="icon" />
               </span>
             </td>
           </tr>
