@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import trashIcon from "../images/trash_icon.png";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 export default function Table () {
 
@@ -52,7 +53,8 @@ export default function Table () {
             <td><a href={`/workshop/${article.id}`}>{article.title}</a></td>
             <td>
               <span onClick={() => trashIconEvent(article.id)} id={article.id} className="trash-wrapper">
-                <img id={article.id} src={trashIcon} className="icon" />
+                
+                <FaRegTrashCan />
               </span>
             </td>
           </tr>
