@@ -2,3 +2,15 @@
     font-size: 50px;
     color:aqua
 }
+
+.nodePanel {
+    position: absolute;
+    border-width: 1px;
+    background: lightgray;
+}
+.reject:hover {
+    background: red;
+}
+.accept:hover {
+    background: green;
+}
