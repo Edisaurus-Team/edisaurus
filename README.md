@@ -8,10 +8,12 @@ This is a Django project that uses Webpack for bundling JSX. You will need an en
 
 After pulling the repo into a folder, install the required Python libraries and Node dependencies, then make your Django migrations and make your Webpack bundle:
 
-`pip install -r requirements.txt`
-`npm install`
-`python manage.py makemigrations`
-`npm run build`
+```
+pip install -r requirements.txt
+npm install
+python manage.py makemigrations
+npm run build
+```
 
 You will also need an OpenAI API key for submitting documents. If you already have an environment variable set in your operating system, then you are good to go. If not, you will need to create a `.env` file in the root folder with an API key:
 
