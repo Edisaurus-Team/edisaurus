@@ -69,9 +69,7 @@ export default function Article() {
         newNode.innerHTML = selectedNode.ins.innerHTML
         selectedNode.ins.parentNode.replaceChild(newNode, selectedNode.ins)        
       }
-      if (selectedNode.del) {
-        selectedNode.del.remove()
-      }
+      if (selectedNode.del) selectedNode.del.remove()
     }
     function reject() {
       if (selectedNode.del) {
@@ -79,22 +77,20 @@ export default function Article() {
         newNode.innerHTML = selectedNode.del.innerHTML
         selectedNode.del.parentNode.replaceChild(newNode, selectedNode.del)        
       }
-      if (selectedNode.ins) {
-        selectedNode.ins.remove()
-      }
+      if (selectedNode.ins) selectedNode.ins.remove()
     }
 
     return (
       <div className='page-content' onClick={(event) => handleDocumentClick(event)}>
-          <div className='articleContent'>
-            <p dangerouslySetInnerHTML={{ __html: content.htmlChanges }}></p>
-            {selectedNode && (
-            <div className='nodePanel' style={{ height: '35px', width: '111px', position: 'absolute', top: selectedNode.anchor.offsetTop + 25, left: selectedNode.anchor.offsetLeft }}>
-              <button className='reject' onClick={reject} style={{height:'100%'}}>reject /</button>
-              <button className='accept' onClick={accept} style={{height:'100%'}}>/ accept</button>
-            </div>
-        )}
+        <div className='articleContent'>
+          <p dangerouslySetInnerHTML={{ __html: content.htmlChanges }}></p>
+          {selectedNode && (
+          <div className='nodePanel' style={{ height: '35px', width: '111px', position: 'absolute', top: selectedNode.anchor.offsetTop + 25, left: selectedNode.anchor.offsetLeft }}>
+            <button className='reject' onClick={reject} style={{height:'100%'}}>reject /</button>
+            <button className='accept' onClick={accept} style={{height:'100%'}}>/ accept</button>
           </div>
+        )}
+        </div>
       </div>
     )
 }
