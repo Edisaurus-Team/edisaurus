@@ -3,14 +3,28 @@
     color:aqua
 }
 
-.nodePanel {
-    position: absolute;
-    border-width: 1px;
-    background: lightgray;
+.articlePanel {
+    margin-inline:auto 5vw;
 }
+
+.nodePanel {
+    display: inline-flex;
+    align-items:center;
+    position: absolute;
+    background: lightgray;
+    color: lightgray;
+}
+
+.panelButton {
+    height: 100%;
+    background-color:rgb(225, 252, 255);
+    border-width: 2px;
+    padding: 5px;
+}
+
 .reject:hover {
-    background: red;
+    background: rgb(255, 50, 50)
 }
 .accept:hover {
-    background: green;
+    background: rgb(50, 255, 50)
 }

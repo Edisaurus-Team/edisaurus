@@ -10,6 +10,7 @@ export default function Article() {
     const { id } = useParams()
     const[content, setContent] = useState([])
     const[selectedNode, setSelectedNode] = useState(null)
+    const[undoStack, setUndoStack] = useState([])
     
     useEffect(() => {
         async function fetchData() {
@@ -27,6 +28,8 @@ export default function Article() {
     function handleDocumentClick(event) {
       if (event.target.nodeName == 'INS' || event.target.nodeName == 'DEL') {
         selectNode(event.target)
+      } else if (event.target.className == 'undoButton') {
+        undo()
       } else {
         setSelectedNode(null)
       }
@@ -57,13 +60,56 @@ export default function Article() {
         }
       }
       setSelectedNode({
-        'anchor': thisNode,
+        'anchor': (delNode ? delNode : insNode).previousElementSibling,
         'del': delNode,
         'ins': insNode,
       })
     }
 
+    function undo(undoType) {
+      console.log('undoing last change!')
+      const undoItem = undoStack.slice(-1)[0]
+      if (undoItem.type == 'accept') {
+        if (undoItem.ins) {
+          let newNode = document.createElement('INS')
+          newNode.innerHTML = undoItem.ins.innerHTML
+          undoItem.anchor.parentNode.replaceChild(newNode, undoItem.anchor.nextElementSibling)
+        }
+        if (undoItem.del) {
+          undoItem.anchor.after(undoItem.del)
+        }
+      }
+      if (undoItem.type == 'reject') {
+        if (undoItem.del) {
+          let newNode = document.createElement('DEL')
+          newNode.innerHTML = undoItem.del.innerHTML
+          undoItem.anchor.parentNode.replaceChild(newNode, undoItem.anchor.nextElementSibling)
+        }
+        if (undoItem.ins && undoItem.del) {
+          undoItem.anchor.nextElementSibling.after(undoItem.ins)
+        } else if (undoItem.ins) {
+          undoItem.anchor.after(undoItem.ins)
+        }
+      }
+      popStack()
+    }
+
+    function addToStack(type) {
+      setUndoStack(currentStack => [
+        ...currentStack, {
+          ...selectedNode,
+          'type': type
+        }
+      ])
+    }
+
+    function popStack() {
+      setUndoStack(currentStack => currentStack.slice(0, currentStack.length - 1));
+    }
+
+
     function accept() {
+      addToStack('accept')
       if (selectedNode.ins) {
         let newNode = document.createElement('SPAN')
         newNode.innerHTML = selectedNode.ins.innerHTML
@@ -72,6 +118,7 @@ export default function Article() {
       if (selectedNode.del) selectedNode.del.remove()
     }
     function reject() {
+      addToStack('reject')
       if (selectedNode.del) {
         let newNode = document.createElement('SPAN')
         newNode.innerHTML = selectedNode.del.innerHTML
@@ -79,15 +126,21 @@ export default function Article() {
       }
       if (selectedNode.ins) selectedNode.ins.remove()
     }
-
+    
     return (
       <div className='page-content' onClick={(event) => handleDocumentClick(event)}>
+        <span className='articlePanel'>
+          <button className='undoButton'>Undo</button>
+        </span>
         <div className='articleContent'>
           <p dangerouslySetInnerHTML={{ __html: content.htmlChanges }}></p>
           {selectedNode && (
-          <div className='nodePanel' style={{ height: '35px', width: '111px', position: 'absolute', top: selectedNode.anchor.offsetTop + 25, left: selectedNode.anchor.offsetLeft }}>
-            <button className='reject' onClick={reject} style={{height:'100%'}}>reject /</button>
-            <button className='accept' onClick={accept} style={{height:'100%'}}>/ accept</button>
+          <div className='nodePanel' style={{position: 'absolute', 
+            top: (selectedNode.del ? selectedNode.del.offsetTop : selectedNode.ins.offsetTop) + 25, 
+            left: (selectedNode.del ? selectedNode.del.offsetLeft : selectedNode.ins.offsetLeft)}}>
+            
+            <button className='panelButton reject' onClick={reject}>Reject</button>
+            <button className='panelButton accept' onClick={accept}>Accept</button>
           </div>
         )}
         </div>
