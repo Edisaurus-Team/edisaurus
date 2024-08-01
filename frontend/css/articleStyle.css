@@ -4,7 +4,10 @@
 }
 
 .articlePanel {
+    padding-top:10px;
     margin-inline:auto 5vw;
+    position:sticky;
+    top:0;
 }
 
 .nodePanel {
@@ -15,11 +18,24 @@
     color: lightgray;
 }
 
-.panelButton {
+.articleButton {
     height: 100%;
-    background-color:rgb(225, 252, 255);
+    background-color:rgb(225, 255, 255);
     border-width: 2px;
     padding: 5px;
+}
+
+.articlePanelButton {
+    margin-inline: 5px;
+}
+
+#undo-inactive {
+    background-color:white;
+    border-color:black;
+}
+
+.articlePanelButton:hover {
+    background-color:rgb(190, 255, 255);
 }
 
 .reject:hover {
@@ -27,4 +43,35 @@
 }
 .accept:hover {
     background: rgb(50, 255, 50)
+}
+
+ins {
+    background: rgb(150, 255, 150);
+}
+
+ins:hover {
+    background: rgb(50, 255, 50);
+    cursor: pointer;
+}
+
+del {
+    background: rgb(255, 150, 150);
+}
+
+del:hover {
+    background: rgb(255, 50, 50);
+    cursor: pointer;
+}
+
+.del-selected {
+    background: rgb(255, 50, 50);
+    border-color:rgb(190, 255, 255);
+    border-width: 3px;
+}
+
+.ins-selected {
+    background: rgb(50, 255, 50);
+    border-color:rgb(190, 255, 255);
+    border-width: 3px;
+    border-radius:3px;
 }

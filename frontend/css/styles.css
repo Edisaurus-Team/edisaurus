@@ -162,14 +162,6 @@ tr:hover {
 }
 
 /* Workshop Page Render */
-.render-icon {
-  height: 50px;
-  cursor: pointer;
-}
-
-.jump-buttons {
-  cursor: pointer;
-}
 
 .exit-buttons {
   position: fixed;
@@ -184,40 +176,11 @@ tr:hover {
   top: 10px;
 }
 
-.icon-wrapper {
-  margin-right: 1vw;
-}
-
 .icon-wrapper:hover {
   .tool-tip {
     visibility: visible;
     overflow: visible;
   }
-}
-
-#reject-remaining-wrapper:hover {
-  filter: hue-rotate(120deg);
-}
-
-#accept-remaining-wrapper:hover {
-  filter: hue-rotate(-90deg);
-}
-
-#review-wrapper:hover {
-  filter: hue-rotate(60deg);
-}
-
-#save-wrapper:hover {
-  filter: hue-rotate(30deg);
-}
-
-#exit-wrapper:hover {
-  filter: hue-rotate(120deg);
-}
-
-.article {
-  padding-top: 20px;
-  margin-inline: 10%;
 }
 
 .workshop-panel {
@@ -246,28 +209,7 @@ tr:hover {
   filter: opacity(85%);
 }
 
-ins {
-  background: rgb(150, 255, 150);
-}
-ins:hover {
-  background: rgb(50, 255, 50);
-  cursor: pointer;
-}
-del {
-  background: rgb(255, 150, 150);
-}
-del:hover {
-  background: rgb(255, 50, 50);
-  cursor: pointer;
-}
 
-.del-selected {
-  background: rgb(255, 50, 50);
-}
-
-.ins-selected {
-  background: rgb(50, 255, 50);
-}
 
 /* Settings */
 .api-key-display {

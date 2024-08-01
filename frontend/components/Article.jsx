@@ -28,9 +28,11 @@ export default function Article() {
     function handleDocumentClick(event) {
       if (event.target.nodeName == 'INS' || event.target.nodeName == 'DEL') {
         selectNode(event.target)
-      } else if (event.target.className == 'undoButton') {
-        undo()
-      } else {
+      } 
+      else if (event.target.id == 'nextChange') {
+        nextChange()
+      } 
+      else {
         setSelectedNode(null)
       }
     }
@@ -66,7 +68,12 @@ export default function Article() {
       })
     }
 
-    function undo(undoType) {
+    function nextChange() {
+      console.log("finding change that comes after ", selectedNode)
+      console.log(selectedNode)
+    }
+
+    function undo() {
       console.log('undoing last change!')
       const undoItem = undoStack.slice(-1)[0]
       if (undoItem.type == 'accept') {
@@ -126,12 +133,14 @@ export default function Article() {
       }
       if (selectedNode.ins) selectedNode.ins.remove()
     }
-    
+
     return (
       <div className='page-content' onClick={(event) => handleDocumentClick(event)}>
-        <span className='articlePanel'>
-          <button className='undoButton'>Undo</button>
-        </span>
+        <div className='articlePanel'>
+          <button id='previousChange' className='articleButton articlePanelButton'>Previous Change</button>
+          <button id='nextChange' className='articleButton articlePanelButton'>Next Change</button>
+          <button id={undoStack.length > 0 ? null : 'undo-inactive'} className='articleButton articlePanelButton' onClick={undo}>Undo</button>
+        </div>
         <div className='articleContent'>
           <p dangerouslySetInnerHTML={{ __html: content.htmlChanges }}></p>
           {selectedNode && (
@@ -139,8 +148,8 @@ export default function Article() {
             top: (selectedNode.del ? selectedNode.del.offsetTop : selectedNode.ins.offsetTop) + 25, 
             left: (selectedNode.del ? selectedNode.del.offsetLeft : selectedNode.ins.offsetLeft)}}>
             
-            <button className='panelButton reject' onClick={reject}>Reject</button>
-            <button className='panelButton accept' onClick={accept}>Accept</button>
+            <button className='articleButton reject' onClick={reject}>Reject</button>
+            <button className='articleButton accept' onClick={accept}>Accept</button>
           </div>
         )}
         </div>
