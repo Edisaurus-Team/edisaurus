@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import ArticlePanel from './ArticlePanel'
-
 
 import '../css/articleStyle.css'
 
