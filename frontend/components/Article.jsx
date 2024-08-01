@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-
 import '../css/articleStyle.css'
 
 
@@ -26,11 +25,11 @@ export default function Article() {
     function handleDocumentClick(event) {
       if (event.target.nodeName == 'INS' || event.target.nodeName == 'DEL') {
         selectNode(event.target)
-      } 
-      else if (event.target.id == 'nextChange') {
+      } else if (event.target.id == 'nextChange') {
         nextChange()
-      } 
-      else {
+      } else if (event.target.id == 'previousChange') {
+        previousChange()
+      } else {
         setSelectedNode(null)
       }
     }
@@ -48,14 +47,14 @@ export default function Article() {
       if (thisNode.nodeName == 'DEL') {
         thisNode.className = 'del-selected'
         delNode = thisNode
-        if (thisNode.nextElementSibling.nodeName == 'INS') {
+        if (thisNode.nextElementSibling !== null && thisNode.nextElementSibling.nodeName == 'INS') {
           insNode = thisNode.nextElementSibling
         }
       }
       if (thisNode.nodeName == 'INS') {
         thisNode.className = 'ins-selected'
         insNode = thisNode
-        if (thisNode.previousElementSibling.nodeName == 'DEL') {
+        if (thisNode.previousElementSibling !== null && thisNode.previousElementSibling.nodeName == 'DEL') {
           delNode = thisNode.previousElementSibling
         }
       }
@@ -67,12 +66,34 @@ export default function Article() {
     }
 
     function nextChange() {
-      console.log("finding change that comes after ", selectedNode)
-      console.log(selectedNode)
+      let change = document.querySelector('.del-selected, .ins-selected')
+      if (!change || change.nextElementSibling == null) {
+        change = document.querySelector('DEL, INS')
+        selectNode(change)
+        change.scrollIntoView({block: 'center', inline: 'nearest'})
+        return
+      } 
+      change.nextElementSibling.nodeName !== 'INS' ? change = change.nextElementSibling : change = change.nextElementSibling.nextElementSibling
+      while (change && change.nodeName !== 'DEL' && change.nodeName !== 'INS') {
+        change = change.nextElementSibling
+      }
+      selectNode(change)
+      change.scrollIntoView({block: 'center', inline: 'nearest'})
+    }
+
+    function previousChange() {
+      let change = document.querySelector('.del-selected, .ins-selected')
+      if (!change) change = document.querySelector('#end')
+      console.log(change)
+      change.previousElementSibling.nodeName !== 'DEL' ? change = change.previousElementSibling : change = change.previousElementSibling.previousElementSibling
+      while (change && change.nodeName !== 'DEL' && change.nodeName !== 'INS') {
+        change = change.previousElementSibling
+      }
+      selectNode(change)
+      change.scrollIntoView({block: 'center', inline: 'nearest'})
     }
 
     function undo() {
-      console.log('undoing last change!')
       const undoItem = undoStack.slice(-1)[0]
       if (undoItem.type == 'accept') {
         if (undoItem.ins) {
@@ -109,9 +130,8 @@ export default function Article() {
     }
 
     function popStack() {
-      setUndoStack(currentStack => currentStack.slice(0, currentStack.length - 1));
+      setUndoStack(currentStack => currentStack.slice(0, currentStack.length - 1))
     }
-
 
     function accept() {
       addToStack('accept')
@@ -135,12 +155,19 @@ export default function Article() {
     return (
       <div className='page-content' onClick={(event) => handleDocumentClick(event)}>
         <div className='articlePanel'>
-          <button id='previousChange' className='articleButton articlePanelButton'>Previous Change</button>
-          <button id='nextChange' className='articleButton articlePanelButton'>Next Change</button>
-          <button id={undoStack.length > 0 ? null : 'undo-inactive'} className='articleButton articlePanelButton' onClick={undo}>Undo</button>
+          <div className='topLeft'>
+            <button id='markup' className='articleTab articlePanelButton'>Markup</button>
+            <button id='finalEdit' className='articleTab articlePanelButton'>Final Edit</button>
+          </div>
+          <div className='topRight'>
+            <button id='previousChange' className='articleButton articlePanelButton'>Previous Change</button>
+            <button id='nextChange' className='articleButton articlePanelButton'>Next Change</button>
+            <button id={undoStack.length > 0 ? null : 'undo-inactive'} className='articleButton articlePanelButton' onClick={undo}>Undo</button>
+          </div>
         </div>
         <div className='articleContent'>
           <p dangerouslySetInnerHTML={{ __html: content.htmlChanges }}></p>
+        </div>
           {selectedNode && (
           <div className='nodePanel' style={{position: 'absolute', 
             top: (selectedNode.del ? selectedNode.del.offsetTop : selectedNode.ins.offsetTop) + 25, 
@@ -150,7 +177,6 @@ export default function Article() {
             <button className='articleButton accept' onClick={accept}>Accept</button>
           </div>
         )}
-        </div>
       </div>
     )
 }
