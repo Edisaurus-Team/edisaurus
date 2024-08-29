@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-// import trashIcon from "../images/trash_icon.png";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa6";
+
 import "../css/workshopTableStyle.css"
 
 export default function Table () {
@@ -75,6 +75,7 @@ export default function Table () {
                   className="icon"
                 />
               </span>
+
             </td>
           </tr>
           ))}
