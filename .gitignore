@@ -1,5 +1,6 @@
 #project specific:
 /personal_notes/
+/editcraft_react/settings.py
 
 #JavaScript library dependencies
 /node_modules
