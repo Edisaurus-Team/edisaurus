@@ -56,7 +56,7 @@ def logout_view(request):
 
 
 def get_table(request):
-    articles = Archive.objects.values('id', 'title')
+    articles = Archive.objects.values('id', 'title').filter(user=request.user.id)
     return JsonResponse(list(articles), safe=False)
 
 
@@ -115,8 +115,11 @@ def workshop_api(request, id):
 
 def get_article(request, id):
     article = Archive.objects.get(id=id)
-    html = create_html(article.diffs)
-    
-    return JsonResponse({
-        "htmlChanges": html
-    })
+    if article.user.id == request.user.id:
+        html = create_html(article.diffs)
+        return JsonResponse({
+            "htmlChanges": html
+        })
+    else:
+        #** Need to get a proper error message sent through. Currently nothing renders on the page.
+        return HttpResponse("That is not your article")
