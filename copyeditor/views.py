@@ -67,8 +67,24 @@ def settings(request):
         "user": user.username,
     })
 
+
 @csrf_exempt
-def uploader(request):
+def stream_response(request):
+    if request.method == "POST":   
+        
+        data = json.loads(request.body.decode('utf-8'))
+        prompt = "You are a professional copy editor who fixes typos and grammatical mistakes in text. You follow MLA style for making corrections. You make MINIMAL edits to the voice or style of the prose, only correcting when there are obvious errors."
+        submit_text = data.get('submit_text', '')        
+
+        # magic begins here :)
+        response = StreamingHttpResponse(openai_call(prompt, submit_text), content_type='text/plain')
+        response['Cache-Control'] = 'no-cache'
+        
+        return response
+
+
+@csrf_exempt
+def create_article(request):
     if request.method == "POST":
 
         data = json.loads(request.body.decode('utf-8'))
@@ -84,20 +100,6 @@ def uploader(request):
 
         return JsonResponse({"articleId": save_in_archive.id})
 
-
-@csrf_exempt
-def stream_response(request):
-    if request.method == "POST":   
-        
-        data = json.loads(request.body.decode('utf-8'))
-        prompt = "You are a professional copy editor who fixes typos and grammatical mistakes in text. You follow MLA style for making corrections. You make MINIMAL edits to the voice or style of the prose, only correcting when there are obvious errors."
-        submit_text = data.get('submit_text', '')        
-
-        # magic begins here :)
-        response = StreamingHttpResponse(openai_call(prompt, submit_text), content_type='text/plain')
-        response['Cache-Control'] = 'no-cache'
-        
-        return response
 
 @csrf_exempt
 # @cache_control(no_cache=True, must_revalidate=True, no_store=True)

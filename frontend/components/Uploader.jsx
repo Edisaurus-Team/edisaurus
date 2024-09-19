@@ -4,8 +4,9 @@ import "../css/uploaderStyle.css"
 export default function Uploader() {
     const [response, setResponse] = useState('');
 
-    async function fetchStream(event) {
+    async function fetchStream(event, type) {
         event.preventDefault();
+        console.log(type)
         const inputText = document.getElementById('upload-text').value
         const response = await fetch('/api/stream_response/', {
             method: 'POST',
@@ -28,7 +29,7 @@ export default function Uploader() {
     };
     
     async function saveAndRedirect(inputText, outputText) {
-        const newArticle = await fetch('/api/uploader/', {
+        const newArticle = await fetch('/api/create_article/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -53,9 +54,18 @@ export default function Uploader() {
                     <textarea id="upload-text" name="text_box" className="uploadTextBox"></textarea>
                 </div>
                 <div>
-                    <button className="btn btn-dark" onClick={fetchStream} type="submit" name="upload" value="upload_text">Submit text</button>    
+                    <button className="btn btn-dark" onClick={(fetchStream)} type="submit" name="upload" value="upload_text">Submit text</button>    
                 </div>
             </form>
+            {/* <form id="upload-resume" method="post" encType="multipart/form-data">
+                <h3>Paste text to be corrected</h3>
+                <div className="form-group">
+                    <textarea id="upload-text" name="text_box" className="uploadTextBox"></textarea>
+                </div>
+                <div>
+                    <button className="btn btn-dark" onClick={() => fetchStream("resume")} type="submit" name="upload" value="upload_text">Submit text</button>    
+                </div>
+            </form> */}
             <div className="articleContent">
                 <p>{response}</p>
             </div>

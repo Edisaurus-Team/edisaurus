@@ -14,7 +14,7 @@ urlpatterns = [
     path('api/get_table/', views.get_table, name='get_table'),
     path('api/settings/', views.settings, name='settings'),
     path('api/get_article/<str:id>', views.get_article, name='get_article'),
-    path('api/uploader/', views.uploader, name='uploader'),
+    path('api/create_article/', views.create_article, name='create_article'),
     path('api/workshop_api/<str:id>', views.workshop_api, name='workshop_api'),
     path('api/stream_response/', views.stream_response, name='stream_response'),
     # **STOP FORGETTING YOUR COMMA IF YOU ADD ANOTHER URL TO THE BOTTOM OF THIS LIST**
