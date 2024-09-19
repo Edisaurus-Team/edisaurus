@@ -29,10 +29,7 @@ export default function Navbar() {
         <NavLink className="accountItem" to="/settings/">
           Settings
         </NavLink>
-        <NavLink className="accountItem" to="/logout/">
-          Logout
-        </NavLink>
-        <a href="/logout/">logout</a>
+        <a className="accountItem" href="/logout/">Logout</a>
       </div>
     </nav>
   );
