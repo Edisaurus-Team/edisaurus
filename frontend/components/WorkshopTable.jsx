@@ -57,7 +57,7 @@ export default function Table () {
           {content.map(article => (
           <tr key={article.id}>
             <td>{article.id}</td>
-            <td><a href={`/workshop/${article.id}`}>{article.title}</a></td>
+            <td style={{paddingRight: '10px'}}><a href={`/workshop/${article.id}`}>{article.title}</a></td>
             <td>
               <span id={article.id} 
                 className={article.id === clickedIcon.id ? "trash-wrapper selected" : "trash-wrapper"} 
