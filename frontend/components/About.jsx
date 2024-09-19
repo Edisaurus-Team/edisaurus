@@ -22,20 +22,8 @@ export default function () {
         <section className="about-container">
           <h4 className="text-center">How to Use</h4>
           <p className="about-paragraph">
-            You will need your own OpenAI API key to use this tool. If you don't
-            have an API key, head to{" "}
-            <a
-              href="https://platform.openai.com/account/api-keys/"
-              target="_blank"
-            >
-              OpenAI's API page
-            </a>{" "}
-            and create an account. You will also need to set up a payment
-            method, as the API does cost a negligible amount for usage.
-          </p>
-          <p className="about-paragraph">
-            Save your API key in the settings menu, so that you won't need to
-            enter it with each submission.
+            To get started, simply head over to the <a href="/uploader">uploader</a> page and paste some text which needs editing. 
+            Your text will be edited by a ChatGPT engine, then returned for a comparison.
           </p>
         </section>
         <section className="about-container">
