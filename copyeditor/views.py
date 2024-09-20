@@ -15,7 +15,7 @@ def index(request):
         return HttpResponseRedirect(reverse('login'))
     return render(request, 'index.html')
 
-
+@csrf_exempt
 def login_view(request):
     if request.method == "POST":
         username = request.POST["username"]
