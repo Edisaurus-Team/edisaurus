@@ -73,11 +73,22 @@ def stream_response(request):
     if request.method == "POST":   
         
         data = json.loads(request.body.decode('utf-8'))
-        prompt = "You are a professional copy editor who fixes typos and grammatical mistakes in text. You follow MLA style for making corrections. You make MINIMAL edits to the voice or style of the prose, only correcting when there are obvious errors."
-        submit_text = data.get('submit_text', '')        
+        
+        edit_type = data.get('edit_type')
+        temperature = float(data.get('temperature'))
+        
+        print(temperature)
+        print(type(temperature))
+        if edit_type == "copyedit":
+            prompt = "You are a professional copy editor who fixes typos and grammatical mistakes in text. You follow MLA style for making corrections. You make MINIMAL edits to the voice or style of the prose, only correcting when there are obvious errors."
+        if edit_type == "resume":
+            prompt = "You are a professional recruiter who fixes resumes. You review text for consistency in punctuation, dates, and verb usage. Strengthen the language to sound more professional when necessary. Fragmented sentences are acceptable."
+
+        print(prompt)
+        submit_text = data.get('submit_text', '')   
 
         # magic begins here :)
-        response = StreamingHttpResponse(openai_call(prompt, submit_text), content_type='text/plain')
+        response = StreamingHttpResponse(openai_call(prompt, submit_text, temperature), content_type='text/plain')
         response['Cache-Control'] = 'no-cache'
         
         return response

@@ -3,5 +3,22 @@
     height: 400px;
 }
 
+.pageRow {
+    width:100%;
+}
 
+.pageLeft {
+
+        float: left;
+        text-align: left;
+        padding-left:1vw;
+        padding-right:15vw;
+        height:100vh;
+        border-right:1px solid darkgrey;
+}
+
+.pageRight {
+        float: left;
+        padding-left:5vw;
+}
 

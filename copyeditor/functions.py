@@ -5,7 +5,7 @@ from openai import OpenAI
 from diff_match_patch import diff_match_patch
 from json import dumps, loads
 
-def openai_call(prompt, submit_text):
+def openai_call(prompt, submit_text, temperature):
     """
     Called in 'uploader' in 'views.py'
     """
@@ -18,6 +18,7 @@ def openai_call(prompt, submit_text):
             {"role": "system", "content": prompt},
             {"role": "user", "content": submit_text}
         ],
+        temperature=temperature,
         stream=True
     )
 

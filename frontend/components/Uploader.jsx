@@ -3,19 +3,25 @@ import "../css/uploaderStyle.css"
 
 export default function Uploader() {
     const [response, setResponse] = useState('');
+    const [sliderValue, setSliderValue] = useState(1)
 
-    async function fetchStream(event, type) {
+    async function fetchStream(event) {
         event.preventDefault();
-        console.log(type)
-        const inputText = document.getElementById('upload-text').value
+        const inputText = document.getElementById('copyeditText').value
+        const editType = "copyedit"
         const response = await fetch('/api/stream_response/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ submit_text: inputText }),
+            body: JSON.stringify({ 
+                submit_text: inputText,
+                edit_type: editType,
+                temperature: sliderValue
+            }),
         });
     
+        //stream response from OpenAI onto the page
         const reader = response.body.getReader();
         const decoder = new TextDecoder('utf-8');
         let outputText = '';
@@ -43,31 +49,37 @@ export default function Uploader() {
         window.location.href = '/workshop/' + id.articleId
     };
 
+    function handleSliderChange(event) {
+        setSliderValue(event.target.value)
+    }
+
     return (
-        <div className="page-content">
-            <div className="page-title">
-                <h1>Uploader</h1>
-            </div>
-            <form id="upload-form" method="post" encType="multipart/form-data">
-                <h3>Paste text to be corrected</h3>
-                <div className="form-group">
-                    <textarea id="upload-text" name="text_box" className="uploadTextBox"></textarea>
+        <div className="page-content">    
+            <div className="pageRow">
+                <div className="pageLeft">
+                    <div style={{marginBottom:"20px"}}>
+                        <h3>settings</h3>
+                    </div>
+                    <p>Temperature: <span>{sliderValue}</span></p>
+                    <input type="range" min="0" max="2" step="0.01" value={sliderValue} onChange={(event) => handleSliderChange(event)}/>
                 </div>
-                <div>
-                    <button className="btn btn-dark" onClick={(fetchStream)} type="submit" name="upload" value="upload_text">Submit text</button>    
+                <div className="pageRight">
+                    <div className="pageTitle">
+                        <h1>Uploader</h1>
+                    </div>         
+                    <form id="copyeditForm" method="post" encType="multipart/form-data">
+                        <h3>Paste text to be corrected</h3>
+                        <div className="form-group">
+                            <textarea id="copyeditText" name="text_box" className="uploadTextBox"></textarea>
+                        </div>
+                        <div>
+                            <button className="btn btn-dark" onClick={((event) => fetchStream(event))} type="submit" name="submitCopyedit" value="submitCopyedit">Submit text</button>    
+                        </div>
+                    </form>
+                    <div className="articleContent">
+                        <p>{response}</p>
+                    </div>
                 </div>
-            </form>
-            {/* <form id="upload-resume" method="post" encType="multipart/form-data">
-                <h3>Paste text to be corrected</h3>
-                <div className="form-group">
-                    <textarea id="upload-text" name="text_box" className="uploadTextBox"></textarea>
-                </div>
-                <div>
-                    <button className="btn btn-dark" onClick={() => fetchStream("resume")} type="submit" name="upload" value="upload_text">Submit text</button>    
-                </div>
-            </form> */}
-            <div className="articleContent">
-                <p>{response}</p>
             </div>
         </div>
     );
