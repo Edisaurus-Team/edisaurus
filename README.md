@@ -1,4 +1,4 @@
-# Edisaurus
+# Copy-Paste Editor
 
 A copyediting tool, powered by AI!
 

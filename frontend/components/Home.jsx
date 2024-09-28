@@ -5,7 +5,7 @@ export default function Home() {
   return (
   <div className="page-content">
     <div className="page-title">
-        <h1>EDISAURUS</h1>
+        <h1>Copy-Paste Editor</h1>
     </div>
     <div className="main-image" style={{width:300}}>
         <img src={head_image} />

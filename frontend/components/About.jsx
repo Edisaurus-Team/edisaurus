@@ -8,7 +8,7 @@ export default function () {
       </header>
       <article>
         <section className="about-container">
-          <h4 className="text-center">Welcome to CopyeditorGPT Turbo 3000!</h4>
+          <h4 className="text-center">Welcome to Copy-Paste Editor!</h4>
           <p className="about-paragraph">
             This is the only tool you'll need to proofread your manuscript, blog
             article, essay, or any other written work. Just upload a Word
