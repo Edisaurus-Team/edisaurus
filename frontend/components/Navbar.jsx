@@ -5,25 +5,21 @@ import { NavLink } from "react-router-dom";
 export default function Navbar() {
   return (
     <nav>
-      <a href="/">
-        <img src={home_thumbnail} style={{ width: 50 }} />
-      </a>
+      <div className="homeIcon">
+        <a href="/">
+          <img src={home_thumbnail} style={{ width: 50 }} />
+        </a>
+      </div>
       <div className="navPages">
-        <li>
           <NavLink className="navItem" to="/uploader/">
             Uploader
-          </NavLink>
-        </li>
-        <li>
+          </NavLink>  
           <NavLink className="navItem" to="/workshop/">
             Workshop
           </NavLink>
-        </li>
-        <li>
           <NavLink className="navItem" to="/about/">
             About
           </NavLink>
-        </li>
       </div>
       <div className="navAccount">
         <NavLink className="accountItem" to="/settings/">

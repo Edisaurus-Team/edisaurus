@@ -7,9 +7,8 @@ export default function Home() {
     <div className="page-title">
         <h1>Copy-Paste Editor</h1>
     </div>
-    <div className="main-image" style={{width:300}}>
+    <div className="main-image">
         <img src={head_image} />
-        
     </div>
     <h2 className="about-header"><a href="/uploader/">Uploader</a></h2>
     <p>Get started by pasting in some text.</p>
