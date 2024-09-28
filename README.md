@@ -2,6 +2,8 @@
 
 A copyediting tool, powered by AI!
 
+See the project here: <a href="https://copypasteeditor.com">copypasteeditor.com</a>
+
 ## Installation
 
 This is a Django project that uses Webpack for bundling JSX. You will need an environment with Django and Node installed.
