@@ -5,7 +5,7 @@ from openai import OpenAI
 from diff_match_patch import diff_match_patch
 from json import dumps, loads
 
-def openai_call(prompt, submit_text, temperature):
+def openai_call(prompt, submit_text, model, temperature):
     """
     Called in 'uploader' in 'views.py'
     """
@@ -13,7 +13,7 @@ def openai_call(prompt, submit_text, temperature):
     client = OpenAI()
 
     completion = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model=model,
         messages=[
             {"role": "system", "content": prompt},
             {"role": "user", "content": submit_text}

@@ -17,6 +17,15 @@
         border-right:1px solid darkgrey;
 }
 
+.leftPanelItem {
+    margin-bottom:50px;
+}
+
+.leftPanelInput:hover {
+    cursor:pointer;
+    background-color:rgb(190, 255, 255);
+}
+
 .pageRight {
         float: left;
         padding-left:5vw;

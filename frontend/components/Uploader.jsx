@@ -4,6 +4,7 @@ import "../css/uploaderStyle.css"
 export default function Uploader() {
     const [response, setResponse] = useState('');
     const [sliderValue, setSliderValue] = useState(1)
+    const [modelChoice, setModelChoice] = useState('gpt-3.5-turbo')
 
     async function fetchStream(event) {
         event.preventDefault();
@@ -17,7 +18,8 @@ export default function Uploader() {
             body: JSON.stringify({ 
                 submit_text: inputText,
                 edit_type: editType,
-                temperature: sliderValue
+                temperature: sliderValue,
+                model: modelChoice
             }),
         });
     
@@ -52,7 +54,12 @@ export default function Uploader() {
     function handleSliderChange(event) {
         setSliderValue(event.target.value)
     }
+    function handleModelChange(event) {
+        setModelChoice(event.target.value)
+    }
 
+
+    console.log(modelChoice)
     return (
         <div className="page-content">    
             <div className="pageRow">
@@ -60,8 +67,19 @@ export default function Uploader() {
                     <div style={{marginBottom:"20px"}}>
                         <h3>settings</h3>
                     </div>
-                    <p>Temperature: <span>{sliderValue}</span></p>
-                    <input type="range" min="0" max="2" step="0.01" value={sliderValue} onChange={(event) => handleSliderChange(event)}/>
+                    <div className="leftPanelItem">
+                        <p>Choose model</p>
+                        <select id="model-choice" className="leftPanelInput" name="model-choice" onChange={(event) => handleModelChange(event)}>
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                            <option value="gpt-4o-mini">GPT-4o mini</option>
+                            <option value="gpt-4o">GPT-4o</option>
+                            <option value="o1-preview">o1-preview</option>
+                        </select>
+                    </div>
+                    <div className="leftPanelItem">
+                        <p>Temperature: <span>{sliderValue}</span></p>
+                        <input type="range" min="0" max="2" step="0.01" value={sliderValue} onChange={(event) => handleSliderChange(event)}/>
+                    </div>
                 </div>
                 <div className="pageRight">
                     <div className="pageTitle">
