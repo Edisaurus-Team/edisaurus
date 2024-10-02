@@ -21,7 +21,7 @@ def openai_call(prompt, submit_text, model, temperature):
         temperature=temperature,
         stream=True
     )
-
+    
     for chunk in completion:
         content = chunk.choices[0].delta.content
         if content:

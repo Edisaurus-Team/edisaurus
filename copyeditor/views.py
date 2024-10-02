@@ -31,7 +31,7 @@ def login_view(request):
     else:
         return render(request, "login.html")
     
-
+@csrf_exempt
 def signup(request):
     if request.method == "POST":
         username = request.POST["username"]
@@ -79,7 +79,7 @@ def stream_response(request):
         model = data.get('model')
         
         if edit_type == "copyedit":
-            prompt = "You are a professional copy editor who fixes typos and grammatical mistakes in text. You follow the Chicago Manual of Style for making corrections. You make MINIMAL edits to the voice or style of the prose, only correcting when there are obvious errors."
+            prompt = "You are a professional editor tasked with changing the verb tense of this writing from present to past. Verbs written in present tense should be altered to past ('is' to 'was'), while verbs written in past tense should be altered to past perfect ('was' to 'had been')"
         if edit_type == "resume":
             prompt = "You are a professional recruiter who fixes resumes. You review text for consistency in punctuation, dates, and verb usage. Strengthen the language to sound more professional when necessary. Fragmented sentences are acceptable."
 
