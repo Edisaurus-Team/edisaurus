@@ -1,0 +1,12 @@
+.page-content {
+    margin-top:5%;
+    margin-inline:5%;
+}
+
+.login-form-container {
+    margin-inline:15%;
+    input {
+        margin-bottom:20px;
+    }
+    
+}
