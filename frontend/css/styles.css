@@ -49,7 +49,7 @@ nav {
   background-color: darkgray;
 }
 
-@media (max-width: 375px) {
+@media (max-width: 500px) {
   nav {
     flex-direction: column;
   }
