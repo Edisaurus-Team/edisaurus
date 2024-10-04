@@ -1,6 +1,11 @@
+body {
+    background: linear-gradient(rgb(242, 239, 239), rgb(215, 214, 214));
+}
+
 .page-content {
     margin-top:5%;
     margin-inline:5%;
+    margin-bottom:15%;
 }
 
 .login-form-container {
