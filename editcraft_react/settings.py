@@ -127,7 +127,8 @@ STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
     BASE_DIR.joinpath('static'),
-    BASE_DIR.joinpath('frontend/javascript')
+    BASE_DIR.joinpath('frontend/javascript'),
+    BASE_DIR.joinpath('frontend/css')
 ]
 
 # Default primary key field type
