@@ -4,12 +4,12 @@ import "../css/uploaderStyle.css"
 export default function Uploader() {
     const [response, setResponse] = useState('');
     const [sliderValue, setSliderValue] = useState(1)
-    const [modelChoice, setModelChoice] = useState('gpt-3.5-turbo')
+    const [modelChoice, setModelChoice] = useState('gpt-4o-mini')
+    const [editChoice, setEditChoice] = useState('copyedit')
 
     async function fetchStream(event) {
         event.preventDefault();
         const inputText = document.getElementById('copyeditText').value
-        const editType = "copyedit"
         const response = await fetch('/api/stream_response/', {
             method: 'POST',
             headers: {
@@ -17,7 +17,7 @@ export default function Uploader() {
             },
             body: JSON.stringify({ 
                 submit_text: inputText,
-                edit_type: editType,
+                edit_type: editChoice,
                 temperature: sliderValue,
                 model: modelChoice
             }),
@@ -51,11 +51,14 @@ export default function Uploader() {
         window.location.href = '/workshop/' + id.articleId
     };
 
-    function handleSliderChange(event) {
-        setSliderValue(event.target.value)
+    function handleEditChange(event) {
+        setEditChoice(event.target.value)
     }
     function handleModelChange(event) {
         setModelChoice(event.target.value)
+    }
+    function handleSliderChange(event) {
+        setSliderValue(event.target.value)
     }
 
 
@@ -68,12 +71,19 @@ export default function Uploader() {
                         <h3>settings</h3>
                     </div>
                     <div className="leftPanelItem">
+                        <p>Choose edit type</p>
+                        <select id="edit-choice" className="leftPanelInput" name="edit-choice" onChange={(event) => handleEditChange(event)}>
+                            <option value="copyedit">Copyedit</option>
+                            <option value="resume">Edit a resume</option>
+                        </select>
+                    </div>
+                    <div className="leftPanelItem">
                         <p>Choose model</p>
                         <select id="model-choice" className="leftPanelInput" name="model-choice" onChange={(event) => handleModelChange(event)}>
-                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
                             <option value="gpt-4o-mini">GPT-4o mini</option>
                             <option value="gpt-4o">GPT-4o</option>
                             <option value="o1-preview">o1-preview</option>
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
                         </select>
                     </div>
                     <div className="leftPanelItem">

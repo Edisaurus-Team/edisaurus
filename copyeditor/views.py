@@ -88,10 +88,11 @@ def stream_response(request):
         temperature = float(data.get('temperature'))
         model = data.get('model')
         
+        print(edit_type)
         if edit_type == "copyedit":
-            prompt = "You are a professional editor tasked with changing the verb tense of this writing from present to past. Verbs written in present tense should be altered to past ('is' to 'was'), while verbs written in past tense should be altered to past perfect ('was' to 'had been')"
+            prompt = "You are a professional copy editor who fixes typos and grammatical mistakes in text. You follow the Chicago Manual of Style for making corrections. You make MINIMAL edits to the voice or style of the prose, only correcting when there are obvious errors."
         if edit_type == "resume":
-            prompt = "You are a professional recruiter who fixes resumes. You review text for consistency in punctuation, dates, and verb usage. Strengthen the language to sound more professional when necessary. Fragmented sentences are acceptable."
+            prompt = "You are a professional recruiter who fixes resumes. You review text for consistency in punctuation, dates, and verb usage. Current job positions should be expressed in present tense. Past positions should be expressed in past tense. Strengthen the language to sound more professional when necessary. Fragmented sentences are acceptable."
 
         submit_text = data.get('submit_text', '')   
 
