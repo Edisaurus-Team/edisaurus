@@ -5,12 +5,17 @@ from openai import OpenAI
 from diff_match_patch import diff_match_patch
 from json import dumps, loads
 
-def openai_call(prompt, submit_text, model, temperature):
+def openai_call(prompt, submit_text, model, temperature, key):
     """
     Called in 'uploader' in 'views.py'
     """
-    load_dotenv()
-    client = OpenAI()
+    if key == False:
+        # No key provided, relying on .env
+        load_dotenv()
+        client = OpenAI()
+    else:
+        # User's personal key provided
+        client = OpenAI(api_key=key)
 
     completion = client.chat.completions.create(
         model=model,

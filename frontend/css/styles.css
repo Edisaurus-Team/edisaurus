@@ -7,6 +7,10 @@
   border: 0px solid green;
 }
 
+.spaced-15px {
+  margin-inline:15px;
+}
+
 /* navbar styling */
 
 nav {
@@ -83,7 +87,8 @@ body {
   flex-direction: column;
   align-items: center;
   margin-inline: 10%;
-  margin: 1rem 0rem 2rem 0rem;
+  margin: 1rem .5rem 2rem .5rem;
+  min-height:60vh;
 }
 
 /* Login */
@@ -214,11 +219,30 @@ tr:hover {
 
 
 /* Settings */
-.api-key-display {
+.api-key-cont {
+  width:60%;
   display: flex;
-  justify-content: space-between;
+  align-items:center;
+  min-height:100px;
+}
+
+.api-key-data-and-form {
+  width:70%;
+}
+
+.api-key-cont:hover {
+  .api-key-edit {
+    display:block;
+  }
+}
+
+.api-key-edit {
+  display: none;
+}
+.api-key-edit:hover {
+  cursor: pointer;
 }
 
 .api-key-form {
-  display: none;
+  width: 70%;
 }

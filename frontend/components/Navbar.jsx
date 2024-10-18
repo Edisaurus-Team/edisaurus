@@ -1,4 +1,3 @@
-// import React from "react";
 import home_thumbnail from "../images/home_thumbnail.png";
 import { NavLink } from "react-router-dom";
 
@@ -14,7 +13,7 @@ export default function Navbar() {
           <NavLink className="navItem" to="/uploader/">
             Uploader
           </NavLink>  
-          <NavLink className="navItem" to="/workshop/">
+          <NavLink className="navItem spaced-15px" to="/workshop/">
             Workshop
           </NavLink>
           <NavLink className="navItem" to="/about/">

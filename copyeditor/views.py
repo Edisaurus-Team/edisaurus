@@ -60,16 +60,26 @@ def get_table(request):
     return JsonResponse(list(articles), safe=False)
 
 
+@csrf_exempt
 def settings(request):
-    user = User.objects.get(username=request.user)
-
-    return JsonResponse( {
-        "user": user.username,
-    })
+    data = User.objects.get(username=request.user, key=request.user.key)
+    if request.method == "GET":
+        
+        return JsonResponse( {
+            "user": data.username,
+            "apiKey": data.key
+        })
+    if request.method == "POST":
+        updated_data = json.loads(request.body.decode('utf-8'))
+        key = updated_data.get('updated_key')
+        data.key = key.strip()
+        data.save()
+        return HttpResponse(status=200)
 
 
 @csrf_exempt
 def stream_response(request):
+    # Uploader
     if request.method == "POST":   
         
         data = json.loads(request.body.decode('utf-8'))
@@ -85,8 +95,12 @@ def stream_response(request):
 
         submit_text = data.get('submit_text', '')   
 
+        key = request.user.key
+        if key == '':
+            key = False
+
         # magic begins here :)
-        response = StreamingHttpResponse(openai_call(prompt, submit_text, model, temperature), content_type='text/plain')
+        response = StreamingHttpResponse(openai_call(prompt, submit_text, model, temperature, key), content_type='text/plain')
         response['Cache-Control'] = 'no-cache'
         
         return response
