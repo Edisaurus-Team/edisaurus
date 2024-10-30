@@ -1,6 +1,9 @@
+body {
+  overflow-x: hidden;
+}
+
 * {
   font-family: "Roboto", sans-serif;
-
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -12,7 +15,6 @@
 }
 
 /* navbar styling */
-
 nav {
   display: flex;
   flex-direction: row;
@@ -60,10 +62,10 @@ nav {
   .navPages {
     margin: 1rem;
   }
-.accountItem {
+  .accountItem {
   font-size: 12px;
   background-color: transparent;
-}
+  }
 }
 
 /* end navbar styling */
@@ -86,7 +88,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-inline: 10%;
   margin: 1rem .5rem 2rem .5rem;
   min-height:60vh;
 }

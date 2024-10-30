@@ -1,20 +1,29 @@
-.uploadTextBox {
-    width: 700px;
-    height: 400px;
-}
-
 .pageRow {
     width:100%;
 }
 
-.pageLeft {
+.pageLeftExpand {
+    display:none;
+    float: left;
+    height:100vh;
+    width: calc(20px + 4vw);
+    p {
+        font-size:30px;
+    }
+}
 
-        float: left;
-        text-align: left;
-        padding-left:1vw;
-        padding-right:15vw;
-        height:100vh;
-        border-right:1px solid darkgrey;
+.pageLeftExpand:hover {
+    background-color:darkgrey;
+    cursor:pointer;
+}
+
+.pageLeft {
+    float: left;
+    text-align: left;
+    padding-left:1vw;
+    padding-right:calc(20px + 3vw);
+    height:100vh;
+    border-right:1px solid darkgrey;
 }
 
 .leftPanelItem {
@@ -27,7 +36,31 @@
 }
 
 .pageRight {
-        float: left;
-        padding-left:5vw;
+    float: left;
+    padding-left: calc(20px + 3vw);
+    width:calc(80px + 60vw);
+    #copyeditText {
+        width: 100%;
+        height: 400px;
+        max-width:800px;
+    }
 }
 
+.closePanel {
+    cursor:pointer;
+    position: absolute;
+    top: 0px;
+    right: 100px;
+}
+
+@media (max-width: 1050px) {
+
+    .pageLeftExpand {
+        display:block;
+    }
+    .pageLeft {
+        visibility: hidden;
+        width:100vw;
+        position:absolute;
+    }
+}
