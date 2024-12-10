@@ -34,7 +34,7 @@ export default function Table () {
           method: 'DELETE',
         })
         .then(response => {
-          if (response.ok) {
+          if (response.ok) {div
             const updatedContent = content.filter(article => article.id !== id);
             setContent(updatedContent);
           } else {
@@ -47,34 +47,36 @@ export default function Table () {
     <div className="page-content">
       <h1>Workshop Dashboard</h1>
       <table>
-      <thead>
-      <tr>
-        <th>ID</th>
-        <th>Title</th>
-      </tr>
-      </thead>
+        <thead>
+          <tr>
+            <th>Your Articles</th>
+          </tr>
+        </thead>
       <tbody>
           {content.map(article => (
           <tr key={article.id}>
-            <td>{article.id}</td>
-            <span className="spaced-15px"><td><a href={`/workshop/${article.id}`}>{article.title}</a></td></span>
+            {/* TITLE */}
             <td>
-              <span id={article.id} 
-                className={article.id === clickedIcon.id ? "trash-wrapper selected" : "trash-wrapper"} 
+              <div className="workshop-table-article"><a href={`/workshop/${article.id}`}>{article.title}</a></div>
+            </td>
+            {/* TRASH CAN */}
+            <td>
+              <div id={article.id} 
+                className={article.id === clickedIcon.id ? "trash-wrapper selected spaced-15px" : "trash-wrapper spaced-15px"} 
                 onClick={() => handleTrashIconClick(article.id)}
               >
                 <FaRegTrashCan className="icon trash-icon" />
-              </span>
+              </div>
             </td>
             <td>
-              <span id={article.id} 
+              <div id={article.id} 
                 style={{visibility: article.id == clickedIcon.id ? 'visible' : 'hidden'}}
                 onClick={() => deleteArticle(article.id)}
               >
                 <FaCheck  
-                  className="icon"
+                  className="icon check-icon"
                 />
-              </span>
+              </div>
 
             </td>
           </tr>

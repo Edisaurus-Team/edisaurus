@@ -138,36 +138,9 @@ p {
   padding: 0rem 1rem 1rem 1rem;
 }
 
-/* Workshop */
-.article-list-view {
-  margin-inline: 10%;
-}
+/* Workshop table*/
+/* see workshopTableStyles.css */
 
-tr {
-  font-size: 20px;
-  width: 100%;
-}
-tr:hover {
-  background: rgb(221, 221, 221);
-  #edit-icon {
-    visibility: visible;
-  }
-}
-.icon {
-  height: 30px;
-  cursor: pointer;
-}
-
-#edit-icon {
-  visibility: hidden;
-  height: 25px;
-  padding-left: 2vw;
-}
-.title-edit-input {
-  margin-right: 2vw;
-  height: 25px;
-  width: 450px;
-}
 
 /* Workshop Page Render */
 

@@ -1,3 +1,54 @@
 .selected {
     color: red;
 }
+
+
+tr {
+    font-size: 20px;
+    border-radius:15px;
+}
+
+tr:hover {
+    #edit-icon {
+        visibility: visible;
+    }
+}
+
+.workshop-table-article {
+    font-size: 30px;
+    margin-top: 10px;
+    padding-inline: 5px;
+}
+
+.workshop-table-article:hover {
+    background-color:rgb(160, 255, 255);
+    border-radius:15px;
+    outline: 2px solid green
+}
+
+.workshop-table-article a:link,
+.workshop-table-article a:visited {
+    text-decoration: none;
+    color: black;
+}
+
+.icon {
+    height: 30px;
+    cursor: pointer;
+}
+  
+.check-icon:hover {
+    color:red;
+}
+  
+#edit-icon {
+    visibility: hidden;
+    height: 25px;
+    padding-left: 2vw;
+}
+
+.title-edit-input {
+    margin-right: 2vw;
+    height: 25px;
+    width: 450px;
+}

@@ -43,7 +43,7 @@
 }
 
 .articlePanelButton:hover {
-    background-color:rgb(190, 255, 255);
+    background-color:rgb(160, 255, 255);
 }
 
 .reject:hover {
@@ -73,11 +73,11 @@ del:hover {
 
 .del-selected {
     background: rgb(255, 50, 50);
-    outline: 2px solid rgb(190, 255, 255);
+    outline: 2px solid rgb(160, 255, 255);
 
 }
 
 .ins-selected {
     background: rgb(50, 255, 50);
-    outline: 2px solid rgb(190, 255, 255);
+    outline: 2px solid rgb(160, 255, 255);
 }

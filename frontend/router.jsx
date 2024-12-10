@@ -7,6 +7,7 @@ import WorkshopTable from "./components/WorkshopTable";
 import Settings from "./components/Settings";
 import Article from "./components/Article";
 import Uploader from "./components/Uploader";
+import Test from "./components/Test";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +27,7 @@ const router = createBrowserRouter([
         element: <WorkshopTable />,
       },
       {
-        path: "workshop/:id",
+        path: "/workshop/:id",
         element: <Article />,
       },
       {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: "/uploader",
         element: <Uploader />,
+      },
+      {
+        path: "/test/:id",
+        element: <Test />,
       }
     ],
   },

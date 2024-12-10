@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,  } from 'react'
 import { useParams } from 'react-router-dom'
 import '../css/articleStyle.css'
 import { FaRegCopy } from "react-icons/fa";
@@ -226,8 +226,12 @@ export default function Article() {
         </div>
       </div>
       <div className='articleContent'>
-        {view == 'markup' && <p dangerouslySetInnerHTML={{__html: content}}></p>}
-        {view == 'finalEdit' && <p dangerouslySetInnerHTML={{__html: finalEdit}}></p>}
+        <div className='markupDisplay' style ={{display:(view == 'markup' ? 'block' : 'none')}}>
+          <p dangerouslySetInnerHTML={{__html: content}}></p>
+        </div>
+        <div className='finalEditDisplay' style={{display: (view == 'finalEdit' ? 'block' : 'none')}}>
+          <p dangerouslySetInnerHTML={{__html: finalEdit}}></p>
+        </div>
       </div>
         {selectedNode &&      
         <div className='nodePanel' style={{position: 'absolute', 
