@@ -10,8 +10,7 @@ export default function () {
           <h4 className="text-center">Welcome to Copy-Paste Editor!</h4>
           <p className="about-paragraph">
             This is the only tool you'll need to proofread your manuscript, blog
-            article, essay, or any other written work. Just upload a Word
-            Document or paste your text directly into the uploader page and
+            article, essay, or any other written work. Just paste your text directly into the uploader page and
             submit. Almost any length can be handled, even a novel of 100,000+
             words. After submitting, the power of artificial intelligence
             handles the rest, giving back a completely edited document for you

@@ -14,6 +14,10 @@ body {
   margin-inline:15px;
 }
 
+.padded-10px {
+  padding:10px
+}
+
 /* navbar styling */
 nav {
   display: flex;
@@ -69,6 +73,30 @@ nav {
 }
 
 /* end navbar styling */
+
+/* home page */
+.home-links {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.home-links a:link,
+.home-links a:visited {
+  color:black;
+  text-decoration:none;
+}
+
+.aqua-hover:hover {
+  background-color:rgb(160, 255, 255);
+  border-radius:15px;
+  outline: 2px solid green
+}
+
+.red-hover:hover {
+  background-color:rgb(255, 160, 160);
+  border-radius:15px;
+  outline: 2px solid green
+}
 
 body {
   background: linear-gradient(rgb(242, 239, 239), rgb(215, 214, 214));

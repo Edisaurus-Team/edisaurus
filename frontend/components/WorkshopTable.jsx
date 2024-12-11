@@ -34,7 +34,7 @@ export default function Table () {
           method: 'DELETE',
         })
         .then(response => {
-          if (response.ok) {div
+          if (response.ok) {
             const updatedContent = content.filter(article => article.id !== id);
             setContent(updatedContent);
           } else {
@@ -57,19 +57,21 @@ export default function Table () {
           <tr key={article.id}>
             {/* TITLE */}
             <td>
-              <div className="workshop-table-article"><a href={`/workshop/${article.id}`}>{article.title}</a></div>
+              <div className="workshop-table-article aqua-hover"><a href={`/workshop/${article.id}`}>{article.title}</a></div>
             </td>
             {/* TRASH CAN */}
             <td>
-              <div id={article.id} 
-                className={article.id === clickedIcon.id ? "trash-wrapper selected spaced-15px" : "trash-wrapper spaced-15px"} 
-                onClick={() => handleTrashIconClick(article.id)}
-              >
-                <FaRegTrashCan className="icon trash-icon" />
+              <div className="red-hover spaced-15px" style={{padding:"10px"}}>
+                <div 
+                  className={article.id === clickedIcon.id ? "trash-wrapper selected" : "trash-wrapper"} 
+                  onClick={() => handleTrashIconClick(article.id)}
+                >
+                  <FaRegTrashCan className="icon trash-icon" />
+                </div>
               </div>
             </td>
             <td>
-              <div id={article.id} 
+              <div  
                 style={{visibility: article.id == clickedIcon.id ? 'visible' : 'hidden'}}
                 onClick={() => deleteArticle(article.id)}
               >

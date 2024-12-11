@@ -10,12 +10,20 @@ export default function Home() {
     <div className="main-image">
         <img src={head_image} />
     </div>
-    <h2 className="about-header"><a href="/uploader/">Uploader</a></h2>
-    <p>Get started by pasting in some text.</p>
-    <h2 className="about-header"><a href="/workshop/">Workshop</a></h2>
-    <p>Review changes in the workshop.</p>
-    <h2 className="about-header"><a href="/about/">About</a></h2>
-    <p>More info here!</p>
+    <div className="home-links">
+      <div className="aqua-hover padded-10px">
+        <h2><a href="/uploader/">Uploader</a></h2>
+        <p>Get started by pasting in some text</p>
+      </div>
+      <div className="aqua-hover padded-10px">
+        <h2><a href="/workshop/">Workshop</a></h2>
+        <p>Review your changes</p>
+      </div>
+      <div className="aqua-hover padded-10px">
+        <h2><a href="/about/">About</a></h2>
+        <p>More info here!</p>
+      </div>
+    </div>
   </div>
   )
 }

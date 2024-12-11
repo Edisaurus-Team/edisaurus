@@ -20,12 +20,6 @@ tr:hover {
     padding-inline: 5px;
 }
 
-.workshop-table-article:hover {
-    background-color:rgb(160, 255, 255);
-    border-radius:15px;
-    outline: 2px solid green
-}
-
 .workshop-table-article a:link,
 .workshop-table-article a:visited {
     text-decoration: none;

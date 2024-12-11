@@ -26,11 +26,12 @@ def openai_call(prompt, submit_text, model, temperature, key):
         temperature=temperature,
         stream=True
     )
-    
+
     for chunk in completion:
         content = chunk.choices[0].delta.content
         if content:
             yield content
+    
 
 
 def compare_text(original_text, edited_text):
