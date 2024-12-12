@@ -47,6 +47,7 @@
 }
 
 #panelClose {
+    position:absolute;
     left:-20vw;
     transition: left 2s;
 }
