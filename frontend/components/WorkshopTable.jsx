@@ -61,14 +61,14 @@ export default function Table () {
             </td>
             {/* TRASH CAN */}
             <td>
-              <div className="red-hover spaced-15px" style={{padding:"10px"}}>
+              <div className="red-hover spaced-15px padded-10px">
                 <div 
                   className={article.id === clickedIcon.id ? "trash-wrapper selected" : "trash-wrapper"} 
                   onClick={() => handleTrashIconClick(article.id)}
                 >
                   <FaRegTrashCan className="icon trash-icon" />
                 </div>
-              </div>
+              </div> 
             </td>
             <td>
               <div  

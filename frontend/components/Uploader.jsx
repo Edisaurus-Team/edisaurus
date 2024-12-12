@@ -1,5 +1,6 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import "../css/uploaderStyle.css"
+import { FaArrowLeft, FaAnglesRight } from "react-icons/fa6";
 
 export default function Uploader() {
     const [response, setResponse] = useState('');
@@ -7,10 +8,13 @@ export default function Uploader() {
     const [modelChoice, setModelChoice] = useState('gpt-4o-mini')
     const [editChoice, setEditChoice] = useState('copyedit')
     const [leftPanelExpanded, setLeftPanelExpanded] = useState(false);
+    const [windowExpanded, setWindowExpanded] = useState(window.innerWidth > 1049)
+    const [formVisible, setFormVisible] = useState(true)
 
     async function fetchStream(event) {
         event.preventDefault();
-        const inputText = document.getElementById('copyeditText').value
+        const inputText = event.target.elements.copyeditText.value;
+        setFormVisible(false)
         const response = await fetch('/api/stream_response/', {
             method: 'POST',
             headers: {
@@ -36,6 +40,16 @@ export default function Uploader() {
         }
         saveAndRedirect(inputText, outputText)
     };
+
+    useEffect(() => {
+        const handleResize = () => {
+          setWindowExpanded(window.innerWidth > 1049);
+        };    
+        window.addEventListener('resize', handleResize);
+        return () => {
+          window.removeEventListener('resize', handleResize);
+        };
+    }, []);
     
     async function saveAndRedirect(inputText, outputText) {
         const newArticle = await fetch('/api/create_article/', {
@@ -52,8 +66,9 @@ export default function Uploader() {
         window.location.href = '/workshop/' + id.articleId
     };
 
-    function leftExpand() {
+    function leftExpand(event) {
         setLeftPanelExpanded(leftPanelExpanded == true ? false : true)
+
     }
 
     function handleEditChange(event) {
@@ -66,13 +81,13 @@ export default function Uploader() {
         setSliderValue(event.target.value)
     }
 
-    console.log(window.innerWidth)
     return (
         <div className="page-content">    
             <div className="pageRow">
-                {/* desktop view */}
-                {window.innerWidth > 1049 && 
-                <div className="pageLeft">
+                <div className="pageLeftExpand" onClick={leftExpand} style={leftPanelExpanded ? {visibility:'hidden'} : {visibility: 'visible'}}>
+                    <FaAnglesRight style={{fontSize:'30px'}} />    
+                </div>
+                <div id="pageLeft" className="pageLeft" style={{visibility:(windowExpanded ? 'visible' : (leftPanelExpanded ? 'visible' : 'hidden'))}}>
                     <div style={{marginBottom:"20px"}}>
                         <h3>settings</h3>
                     </div>
@@ -96,60 +111,28 @@ export default function Uploader() {
                         <p>Temperature: <span>{sliderValue}</span></p>
                         <input type="range" min="0" max="2" step="0.01" value={sliderValue} onChange={(event) => handleSliderChange(event)}/>
                     </div>
-                </div>}
-                {/* mobile view */}
-                {window.innerWidth < 1049 && 
-                <div className="pageLeftExpand" onClick={leftExpand} style={leftPanelExpanded ? {visibility:'hidden'} : {visibility: 'visible'}}>
-                    <p>...</p>    
-                </div>}
-                {window.innerWidth < 1049 && 
-                <div className="pageLeft" style={leftPanelExpanded ? {visibility:'visible'} : {visibility: 'hidden'}}>
-                    
-                        <div style={{marginBottom:"20px"}}>
-                            <h3>settings</h3>
-                        </div>
-                        <div className="closePanel" onClick={leftExpand}>
-                            <p>X</p>
-                        </div>
-                    
-                    <div className="leftPanelItem">
-                        <p>Choose edit type</p>
-                        <select id="edit-choice" className="leftPanelInput" name="edit-choice" onChange={(event) => handleEditChange(event)}>
-                            <option value="copyedit">Copyedit</option>
-                            <option value="resume">Edit a resume</option>
-                        </select>
+                    <div id="panelClose" onClick={leftExpand}>
+                        <FaArrowLeft style={{fontSize:'30px'}} />
                     </div>
-                    <div className="leftPanelItem">
-                        <p>Choose model</p>
-                        <select id="model-choice" className="leftPanelInput" name="model-choice" onChange={(event) => handleModelChange(event)}>
-                            <option value="gpt-4o-mini">GPT-4o mini</option>
-                            <option value="gpt-4o">GPT-4o</option>
-                            <option value="o1-preview">o1-preview</option>
-                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                        </select>
-                    </div>
-                    <div className="leftPanelItem">
-                        <p>Temperature: <span>{sliderValue}</span></p>
-                        <input type="range" min="0" max="2" step="0.01" value={sliderValue} onChange={(event) => handleSliderChange(event)}/>
-                    </div>
-                </div>}
+                </div>
 
-
-                <div className="pageRight" style={leftPanelExpanded ? {visibility:'hidden'} : {visibility: 'visible'}}>
+                <div className="pageRight" style={{visibility:(windowExpanded ? 'visible' : (leftPanelExpanded ? 'hidden' : 'visible'))}}>
                     <div className="pageTitle">
                         <h1>Uploader</h1>
                     </div>         
-                    <form id="copyeditForm" method="post" encType="multipart/form-data">
-                        <h3>Paste text to be corrected</h3>
-                        <div className="form-group">
-                            <textarea id="copyeditText" name="text_box"></textarea>
-                        </div>
-                        <div>
-                            <button className="btn btn-dark" onClick={((event) => fetchStream(event))} type="submit" name="submitCopyedit" value="submitCopyedit">Submit text</button>    
-                        </div>
-                    </form>
+                    {formVisible && (
+                        <form id="copyeditForm" method="post" onSubmit={fetchStream} encType="multipart/form-data">
+                            <h3>Paste text to be corrected</h3>
+                            <div className="form-group">
+                                <textarea id="copyeditText" name="text_box"></textarea>
+                            </div>
+                            <div>
+                                <button className="btn btn-dark" type="submit" name="submitCopyedit" value="submitCopyedit">Submit text</button>    
+                            </div>
+                        </form>
+                    )}
                     <div className="articleContent">
-                        <p>{response}</p>
+                        <>{response}</>
                     </div>
                 </div>
             </div>

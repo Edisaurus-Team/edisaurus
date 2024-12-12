@@ -46,21 +46,29 @@
     }
 }
 
-.closePanel {
-    cursor:pointer;
-    position: absolute;
-    top: 0px;
-    right: 100px;
+#panelClose {
+    left:-20vw;
+    transition: left 2s;
 }
 
-@media (max-width: 1050px) {
+@media (max-width: 1049px) {
+    #panelClose {
+        display:block;
+        cursor:pointer;
+        position: absolute;
+        top: 0px;
+        left: -15vw;
+    }
 
     .pageLeftExpand {
         display:block;
+        transition:0.2s ease-out;
     }
     .pageLeft {
         visibility: hidden;
         width:100vw;
+        align-items:center;
         position:absolute;
+        left: 30vw;
     }
 }

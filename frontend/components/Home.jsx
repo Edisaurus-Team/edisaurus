@@ -8,7 +8,7 @@ export default function Home() {
         <h1>Copy-Paste Editor</h1>
     </div>
     <div className="main-image">
-        <img src={head_image} />
+        <img style={{width:"calc(200px + 20vw"}} src={head_image} />
     </div>
     <div className="home-links">
       <div className="aqua-hover padded-10px">
