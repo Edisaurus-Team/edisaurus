@@ -12,16 +12,22 @@ export default function Home() {
     </div>
     <div className="home-links">
       <div className="aqua-hover padded-10px">
-        <h2><a href="/uploader/">Uploader</a></h2>
-        <p>Get started by pasting in some text</p>
+        <a href="/uploader/">
+          <h2>Uploader</h2>
+          <p>Get started by pasting in some text</p>
+        </a>
       </div>
       <div className="aqua-hover padded-10px">
-        <h2><a href="/workshop/">Workshop</a></h2>
-        <p>Review your changes</p>
+      <a href="/workshop/">
+          <h2>Workshop</h2>
+          <p>Review your changes</p>
+        </a>
       </div>
       <div className="aqua-hover padded-10px">
-        <h2><a href="/about/">About</a></h2>
-        <p>More info here!</p>
+        <a href="/about/">
+          <h2>About</h2>
+          <p>More info here!</p>
+        </a>
       </div>
     </div>
   </div>
