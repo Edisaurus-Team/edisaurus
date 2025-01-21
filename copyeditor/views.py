@@ -27,7 +27,9 @@ def login_view(request):
             return HttpResponseRedirect(reverse('index'))
 
         else:
-            return render(request, "login.html")
+            return render(request, "login.html", {
+                "error_message": True
+            })
     else:
         return render(request, "login.html")
     

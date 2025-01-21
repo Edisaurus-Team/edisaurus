@@ -52,13 +52,17 @@
     transition: left 2s;
 }
 
+.panel-alert {
+    max-width:180px;
+}
+
 @media (max-width: 1049px) {
     #panelClose {
+        position: absolute;
+        left: -15vw;
         display:block;
         cursor:pointer;
-        position: absolute;
         top: 0px;
-        left: -15vw;
     }
 
     .pageLeftExpand {
@@ -66,10 +70,10 @@
         transition:0.2s ease-out;
     }
     .pageLeft {
-        visibility: hidden;
+        position:absolute;
         width:100vw;
         align-items:center;
-        position:absolute;
         left: 30vw;
+        transition: left 1s;
     }
 }

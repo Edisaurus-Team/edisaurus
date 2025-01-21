@@ -14,13 +14,13 @@ export default function Home() {
       <div className="aqua-hover padded-10px">
         <a href="/uploader/">
           <h2>Uploader</h2>
-          <p>Get started by pasting in some text</p>
+          <p>Paste some text and AI will correct it!</p>
         </a>
       </div>
       <div className="aqua-hover padded-10px">
       <a href="/workshop/">
           <h2>Workshop</h2>
-          <p>Review your changes</p>
+          <p>Review and approve changes</p>
         </a>
       </div>
       <div className="aqua-hover padded-10px">

@@ -185,12 +185,7 @@ p {
   top: 10px;
 }
 
-.icon-wrapper:hover {
-  .tool-tip {
-    visibility: visible;
-    overflow: visible;
-  }
-}
+
 
 .workshop-panel {
   position: fixed;
@@ -214,8 +209,19 @@ p {
   background: rgb(36, 35, 35);
   visibility: hidden;
   position: absolute;
-  top: 50px;
   filter: opacity(85%);
+  top: 30px;
+}
+
+.tool-tip-wrapper {
+  position: relative
+}
+
+.tool-tip-wrapper:hover {
+  .tool-tip {
+    visibility: visible;
+    overflow: visible;
+  }
 }
 
 

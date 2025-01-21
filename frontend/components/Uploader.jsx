@@ -4,7 +4,7 @@ import { FaArrowLeft, FaAnglesRight } from "react-icons/fa6";
 
 export default function Uploader() {
     const [response, setResponse] = useState('');
-    const [sliderValue, setSliderValue] = useState(1)
+    const [sliderValue, setSliderValue] = useState(0)
     const [modelChoice, setModelChoice] = useState('gpt-4o-mini')
     const [editChoice, setEditChoice] = useState('copyedit')
     const [leftPanelExpanded, setLeftPanelExpanded] = useState(false);
@@ -87,7 +87,10 @@ export default function Uploader() {
                 <div className="pageLeftExpand" onClick={leftExpand} style={leftPanelExpanded ? {visibility:'hidden'} : {visibility: 'visible'}}>
                     <FaAnglesRight style={{fontSize:'30px'}} />    
                 </div>
-                <div id="pageLeft" className="pageLeft" style={{visibility:(windowExpanded ? 'visible' : (leftPanelExpanded ? 'visible' : 'hidden'))}}>
+                <div id="pageLeft" className="pageLeft" 
+                    style={{
+                        visibility:(windowExpanded ? 'visible' : (leftPanelExpanded ? 'visible' : 'hidden'))
+                    }}>
                     <div style={{marginBottom:"20px"}}>
                         <h3>settings</h3>
                     </div>
@@ -108,8 +111,18 @@ export default function Uploader() {
                         </select>
                     </div>
                     <div className="leftPanelItem">
-                        <p>Temperature: <span>{sliderValue}</span></p>
-                        <input type="range" min="0" max="2" step="0.01" value={sliderValue} onChange={(event) => handleSliderChange(event)}/>
+                        <div className="tool-tip-wrapper">
+                            <p>Temperature: <span>{sliderValue}</span></p>
+                            <div class="tool-tip leftPanelToolTip">
+                                Increases the randomness of output. <br/>
+                                (A lower temperature works best for editing)
+                            </div>
+
+                        </div>
+                        <input type="range" min="0" max="1.9" step="0.01" value={sliderValue} onChange={(event) => handleSliderChange(event)}/>
+                        <div class={sliderValue > 1.89 ? "alert alert-danger panel-alert" : ""} role="alert">
+                            {sliderValue > 1.89 ? "Temp values above 1.9 result in unusable output!" : "" }
+                        </div>
                     </div>
                     <div id="panelClose" onClick={leftExpand}>
                         <FaArrowLeft style={{fontSize:'30px'}} />
