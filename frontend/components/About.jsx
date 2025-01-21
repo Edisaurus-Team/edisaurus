@@ -33,6 +33,13 @@ export default function () {
             <ins>green</ins> to accept them.
           </p>
         </section>
+        <section className="about-container">
+          <h4 className="text-center">Contribute</h4>
+          <p className="about-paragraph">
+            This is an open-source project, coded in Python and React. <br/><br/>
+            Want to contribute? Check out <a href="https://github.com/Edisaurus-Team/edisaurus/">the Github repo</a> and get in touch with me through <a href="https://github.com/ThomasMoncrief">my Github profile.</a>
+          </p>
+        </section>
       </article>
     </main>
   );
