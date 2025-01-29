@@ -18,6 +18,7 @@ def index(request):
 @csrf_exempt
 def login_view(request):
     if request.method == "POST":
+        
         username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
@@ -36,6 +37,15 @@ def login_view(request):
 @csrf_exempt
 def signup(request):
     if request.method == "POST":
+        # need to notify if a duplicate name is used
+        
+        try:
+            if request.POST["survey"]:
+                return render(request, "login.html", {
+                    "error_message": True
+                })
+        except:
+            pass
         username = request.POST["username"]
         email = request.POST["email"]
         password = request.POST["password"]
