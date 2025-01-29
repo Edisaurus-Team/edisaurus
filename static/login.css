@@ -17,6 +17,6 @@ body {
 }
 
 .tester {
-    /* height: 0px;
-    overflow: hidden; */
+    height: 0px;
+    overflow: hidden;
 }
