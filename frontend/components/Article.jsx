@@ -24,13 +24,10 @@ export default function Article() {
       }
       fetchData()
   }, [id])
-  
-  useEffect(() => setFinalEdit(processFinalText), [content])
-  useEffect(() => setFinalEdit(processFinalText), [undoStack])
 
   function processFinalText() {
     let currentEdit = document.createElement('div')
-    currentEdit.innerHTML = document.querySelector('.articleContent').innerHTML
+    currentEdit.innerHTML = document.querySelector('.markupDisplay').innerHTML
     let remainingDeletes = currentEdit.querySelectorAll('DEL')
     remainingDeletes.forEach(del => del.remove())
     let inserts = currentEdit.querySelectorAll('INS')
@@ -47,7 +44,6 @@ export default function Article() {
       selectNode(event.target)
     } else if (event.target.id == 'acceptRemaining') {
       acceptRemaining()
-      setFinalEdit(document.querySelector('.articleContent').innerHTML)
     } else if (event.target.id == 'nextChange') {
       nextChange()
     } else if (event.target.id == 'previousChange') {
@@ -56,7 +52,7 @@ export default function Article() {
       console.log('viewing markup')
       setView('markup')
     } else if (event.target.id == 'finalEdit') {
-      setContent(document.querySelector('.articleContent').innerHTML)
+      setFinalEdit(processFinalText())
       console.log("viewing final edit")
       setView('finalEdit')
     } else {
