@@ -6,18 +6,19 @@ import { FaRegCopy } from "react-icons/fa";
 
 export default function Article() {
   const { id } = useParams()
-  const[content, setContent] = useState([])
-  const[date, setDate] = useState()
-  const[selectedNode, setSelectedNode] = useState()
-  const[undoStack, setUndoStack] = useState([])
-  const[view, setView] = useState('markup')
+  const [content, setContent] = useState([])
+  const [date, setDate] = useState()
+  const [selectedNode, setSelectedNode] = useState()
+  const [undoStack, setUndoStack] = useState([])
+  const [view, setView] = useState('markup')
   
   //not sure if these need to be set in state, since they never change.
   //may want to have a separate fetch function. 
-  const[finalEdit, setFinalEdit] = useState(null)
-  const[editType, setEditType] = useState()
-  const[model, setModel] = useState()
-  const[temp, setTemp] = useState()
+  const [finalEdit, setFinalEdit] = useState(null)
+  const [editType, setEditType] = useState()
+  const [model, setModel] = useState()
+  const [temp, setTemp] = useState()
+  const [prompt, setPrompt] = useState()
 
 
   useEffect(() => {
@@ -30,6 +31,7 @@ export default function Article() {
               setEditType(data.editType)
               setModel(data.model)
               setTemp(data.temp)
+              setPrompt(data.customPrompt)
           } catch (error) {
               console.error('Error:', error)
           }
@@ -247,6 +249,9 @@ export default function Article() {
           <p><b>Edit Type</b><br/>{editType}</p>
           <p><b>Model Choice</b><br/>{model}</p>
           <p><b>Temperature</b><br/>{temp}</p>
+          {prompt != "" &&
+            <p><b>Custom Prompt</b><br/>{prompt}</p>
+          }
 
         </div>
       </div>

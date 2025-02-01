@@ -3,8 +3,8 @@ import { FaPencilAlt } from "react-icons/fa";
 
 export default function Settings() {
     
-    const[content, setContent] = useState([]);
-    const[apiKeyDisplay, setApiKeyDisplay] = useState(false)
+    const [content, setContent] = useState([]);
+    const [apiKeyDisplay, setApiKeyDisplay] = useState(false)
 
     useEffect(() => {
         async function fetchData() {

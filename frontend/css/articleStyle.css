@@ -72,6 +72,7 @@
 .articleInfo {
     width:100%;
     text-align:right;
+    max-width: 500px;
 
 }
 

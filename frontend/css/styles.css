@@ -250,3 +250,7 @@ p {
 .api-key-form {
   width: 70%;
 }
+
+.wide-text {
+  width: 100%;
+}

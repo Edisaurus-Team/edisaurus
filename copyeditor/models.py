@@ -16,6 +16,7 @@ class Archive(models.Model):
     diffs = models.TextField(default="")
 
     #submission info
-    prompt = models.CharField(max_length=1000, blank=True)
-    engine = models.CharField(max_length=50, blank=True)
+    edit_type = models.CharField(max_length=1000, blank=True)
+    language_model = models.CharField(max_length=50, blank=True)
     temp = models.FloatField(blank=True)
+    custom_prompt = models.CharField(max_length=1000, blank=True)

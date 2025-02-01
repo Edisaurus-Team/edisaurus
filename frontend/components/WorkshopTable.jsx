@@ -6,8 +6,8 @@ import "../css/workshopTableStyle.css"
 
 export default function Table () {
 
-    const[content, setContent] = useState([]);
-    const[clickedIcon, setClickedIcon] = useState([]);
+    const [content, setContent] = useState([]);
+    const [clickedIcon, setClickedIcon] = useState([]);
 
     async function updateTable() {
       try {

@@ -97,14 +97,16 @@ def stream_response(request):
         data = json.loads(request.body.decode('utf-8'))
         
         edit_type = data.get('edit_type')
+        custom_prompt = data.get('custom_prompt')
         temperature = float(data.get('temperature'))
         model = data.get('model')
         
-        print(edit_type)
         if edit_type == "copyedit":
             prompt = "You are a professional copy editor who fixes typos and grammatical mistakes in text. You follow the Chicago Manual of Style for making corrections. You make MINIMAL edits to the voice or style of the prose, only correcting when there are obvious errors."
         if edit_type == "resume":
             prompt = "You are a professional recruiter who fixes resumes. You review text for consistency in punctuation, dates, and verb usage. Current job positions should be expressed in present tense. Past positions should be expressed in past tense. Strengthen the language to sound more professional when necessary. Fragmented sentences are acceptable."
+        if edit_type == "custom":
+            prompt = custom_prompt
 
         submit_text = data.get('submit_text', '')   
 
@@ -129,6 +131,7 @@ def create_article(request):
         edit_type = data.get('edit_type', '')
         model_choice = data.get('model_choice', '')
         temperature = float(data.get('temperature', ''))
+        custom_prompt = data.get('custom_prompt', '')
 
         # # create title from first 50 characters, or all that comes before a line break
         title = edited_text[:50].split("\n")[0]
@@ -139,9 +142,11 @@ def create_article(request):
                                   original_text=submit_text, 
                                   edited_text=edited_text, 
                                   diffs=diffs, 
-                                  prompt=edit_type, 
+                                  edit_type=edit_type, 
                                   temp=temperature, 
-                                  engine=model_choice)
+                                  language_model=model_choice,
+                                  custom_prompt=custom_prompt
+                                  )
         save_in_archive.save()
 
         return JsonResponse({"articleId": save_in_archive.id})
@@ -168,10 +173,10 @@ def get_article(request, id):
         return JsonResponse({
             "htmlChanges": html,
             "submitDate": article.submit_time,
-            #* calling this "editType" for now, but later this will show the entire prompt when customized.
-            "editType": article.prompt,
-            "model": article.engine,
-            "temp": article.temp
+            "editType": article.edit_type,
+            "model": article.language_model,
+            "temp": article.temp,
+            "customPrompt": article.custom_prompt
         })
     else:
         #** Need to get a proper error message sent through. Currently nothing renders on the page.

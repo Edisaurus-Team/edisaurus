@@ -10,6 +10,7 @@ export default function Uploader() {
     const [leftPanelExpanded, setLeftPanelExpanded] = useState(false);
     const [windowExpanded, setWindowExpanded] = useState(window.innerWidth > 1049)
     const [formVisible, setFormVisible] = useState(true)
+    const [customPrompt, setCustomPrompt] = useState("")
 
     async function fetchStream(event) {
         event.preventDefault();
@@ -24,7 +25,8 @@ export default function Uploader() {
                 submit_text: inputText,
                 edit_type: editChoice,
                 temperature: sliderValue,
-                model: modelChoice
+                model: modelChoice,
+                custom_prompt: customPrompt
             }),
         });
     
@@ -63,6 +65,7 @@ export default function Uploader() {
                 edit_type: editChoice,
                 temperature: sliderValue,
                 model_choice: modelChoice,
+                custom_prompt: customPrompt
             }),
         });
         const id = await newArticle.json();
@@ -71,7 +74,6 @@ export default function Uploader() {
 
     function leftExpand(event) {
         setLeftPanelExpanded(leftPanelExpanded == true ? false : true)
-
     }
 
     function handleEditChange(event) {
@@ -83,7 +85,11 @@ export default function Uploader() {
     function handleSliderChange(event) {
         setSliderValue(event.target.value)
     }
+    function handlePromptChange(event) {
+        setCustomPrompt(event.target.value)
+    }
 
+    console.log(customPrompt)
     return (
         <div className="page-content">    
             <div className="pageRow">
@@ -102,6 +108,7 @@ export default function Uploader() {
                         <select id="edit-choice" className="leftPanelInput" name="edit-choice" onChange={(event) => handleEditChange(event)}>
                             <option value="copyedit">Copyedit</option>
                             <option value="resume">Edit a resume</option>
+                            <option value="custom">Custom Prompt</option>
                         </select>
                     </div>
                     <div className="leftPanelItem">
@@ -109,21 +116,21 @@ export default function Uploader() {
                         <select id="model-choice" className="leftPanelInput" name="model-choice" onChange={(event) => handleModelChange(event)}>
                             <option value="gpt-4o-mini">GPT-4o mini</option>
                             <option value="gpt-4o">GPT-4o</option>
-                            <option value="o1-preview">o1-preview</option>
+                            {/* <option value="o3-mini">o3-mini</option> */}
                             <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
                         </select>
                     </div>
                     <div className="leftPanelItem">
                         <div className="tool-tip-wrapper">
                             <p>Temperature: <span>{sliderValue}</span></p>
-                            <div class="tool-tip leftPanelToolTip">
+                            <div className="tool-tip leftPanelToolTip">
                                 Increases the randomness of output. <br/>
                                 (A lower temperature works best for editing)
                             </div>
 
                         </div>
                         <input type="range" min="0" max="1.9" step="0.01" value={sliderValue} onChange={(event) => handleSliderChange(event)}/>
-                        <div class={sliderValue > 1.89 ? "alert alert-danger panel-alert" : ""} role="alert">
+                        <div className={sliderValue > 1.89 ? "alert alert-danger panel-alert" : ""} role="alert">
                             {sliderValue > 1.89 ? "Temp values above 1.9 result in unusable output!" : "" }
                         </div>
                     </div>
@@ -135,7 +142,13 @@ export default function Uploader() {
                 <div className="pageRight" style={{visibility:(windowExpanded ? 'visible' : (leftPanelExpanded ? 'hidden' : 'visible'))}}>
                     <div className="pageTitle">
                         <h1>Uploader</h1>
-                    </div>         
+                    </div>
+                    {editChoice == "custom" && (
+                        <div className="form-group">
+                            <p>Prompt:</p>
+                            <textarea className="wide-text" type="text" rows="2" onChange={(event) => handlePromptChange(event)} placeholder="You are a professional copy editor who fixes typos and grammatical mistakes in text." />
+                        </div>
+                    )}
                     {formVisible && (
                         <form id="copyeditForm" method="post" onSubmit={fetchStream} encType="multipart/form-data">
                             <h3>Paste text to be corrected</h3>
