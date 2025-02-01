@@ -7,10 +7,18 @@ import { FaRegCopy } from "react-icons/fa";
 export default function Article() {
   const { id } = useParams()
   const[content, setContent] = useState([])
+  const[date, setDate] = useState()
   const[selectedNode, setSelectedNode] = useState()
   const[undoStack, setUndoStack] = useState([])
   const[view, setView] = useState('markup')
+  
+  //not sure if these need to be set in state, since they never change.
+  //may want to have a separate fetch function. 
   const[finalEdit, setFinalEdit] = useState(null)
+  const[editType, setEditType] = useState()
+  const[model, setModel] = useState()
+  const[temp, setTemp] = useState()
+
 
   useEffect(() => {
       async function fetchData() {
@@ -18,6 +26,10 @@ export default function Article() {
               const response = await fetch('/api/get_article/' + id)
               const data = await response.json()
               setContent(data.htmlChanges)
+              setDate(data.submitDate)
+              setEditType(data.editType)
+              setModel(data.model)
+              setTemp(data.temp)
           } catch (error) {
               console.error('Error:', error)
           }
@@ -222,11 +234,20 @@ export default function Article() {
         </div>
       </div>
       <div className='articleContent'>
-        <div className='markupDisplay' style ={{display:(view == 'markup' ? 'block' : 'none')}}>
-          <p dangerouslySetInnerHTML={{__html: content}}></p>
+        <div className='articleText'>
+          <div className='markupDisplay' style ={{display:(view == 'markup' ? 'block' : 'none')}}>
+            <p dangerouslySetInnerHTML={{__html: content}}></p>
+          </div>
+          <div className='finalEditDisplay' style={{display: (view == 'finalEdit' ? 'block' : 'none')}}>
+            <p dangerouslySetInnerHTML={{__html: finalEdit}}></p>
+          </div>
         </div>
-        <div className='finalEditDisplay' style={{display: (view == 'finalEdit' ? 'block' : 'none')}}>
-          <p dangerouslySetInnerHTML={{__html: finalEdit}}></p>
+        <div className="articleInfo">
+          <p><b>Submission Time</b><br/>{date}</p>
+          <p><b>Edit Type</b><br/>{editType}</p>
+          <p><b>Model Choice</b><br/>{model}</p>
+          <p><b>Temperature</b><br/>{temp}</p>
+
         </div>
       </div>
         {selectedNode &&      

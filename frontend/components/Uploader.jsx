@@ -60,6 +60,9 @@ export default function Uploader() {
             body: JSON.stringify({ 
                 submit_text: inputText,
                 edited_text: outputText,
+                edit_type: editChoice,
+                temperature: sliderValue,
+                model_choice: modelChoice,
             }),
         });
         const id = await newArticle.json();

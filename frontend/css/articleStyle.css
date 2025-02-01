@@ -53,6 +53,28 @@
     background: rgb(50, 255, 50)
 }
 
+.articleContent {
+    display: flex;
+    gap:5vw;
+    margin-right:5vw;
+    margin-left:15vw;
+    margin-top:50px;
+    max-width: 100%;
+    min-height: 50vh;
+    justify-content:right;
+}
+
+.articleText {
+    display: flex;
+    justify-content:right;
+}
+
+.articleInfo {
+    width:100%;
+    text-align:right;
+
+}
+
 ins {
     background: rgb(150, 255, 150);
 }

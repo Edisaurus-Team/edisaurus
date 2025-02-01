@@ -125,13 +125,23 @@ def create_article(request):
 
         data = json.loads(request.body.decode('utf-8'))
         submit_text = data.get('submit_text', '')
-        edited_text = data.get('edited_text', '')     
+        edited_text = data.get('edited_text', '')
+        edit_type = data.get('edit_type', '')
+        model_choice = data.get('model_choice', '')
+        temperature = float(data.get('temperature', ''))
 
         # # create title from first 50 characters, or all that comes before a line break
         title = edited_text[:50].split("\n")[0]
 
         diffs = compare_text(submit_text, edited_text)
-        save_in_archive = Archive(user=request.user, title=title, original_text=submit_text, edited_text=edited_text, diffs=diffs)
+        save_in_archive = Archive(user=request.user, 
+                                  title=title, 
+                                  original_text=submit_text, 
+                                  edited_text=edited_text, 
+                                  diffs=diffs, 
+                                  prompt=edit_type, 
+                                  temp=temperature, 
+                                  engine=model_choice)
         save_in_archive.save()
 
         return JsonResponse({"articleId": save_in_archive.id})
@@ -156,7 +166,12 @@ def get_article(request, id):
     if article.user.id == request.user.id:
         html = create_html(article.diffs)
         return JsonResponse({
-            "htmlChanges": html
+            "htmlChanges": html,
+            "submitDate": article.submit_time,
+            #* calling this "editType" for now, but later this will show the entire prompt when customized.
+            "editType": article.prompt,
+            "model": article.engine,
+            "temp": article.temp
         })
     else:
         #** Need to get a proper error message sent through. Currently nothing renders on the page.
