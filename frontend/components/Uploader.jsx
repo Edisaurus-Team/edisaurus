@@ -89,7 +89,6 @@ export default function Uploader() {
         setCustomPrompt(event.target.value)
     }
 
-    console.log(customPrompt)
     return (
         <div className="page-content">    
             <div className="pageRow">

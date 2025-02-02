@@ -1,6 +1,7 @@
 #project specific:
 /personal_notes/
 
+
 #JavaScript library dependencies
 /node_modules
 /.pnp
