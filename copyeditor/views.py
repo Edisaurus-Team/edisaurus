@@ -170,13 +170,15 @@ def get_article(request, id):
     article = Archive.objects.get(id=id)
     if article.user.id == request.user.id:
         html = create_html(article.diffs)
+        print(article.original_text)
         return JsonResponse({
             "htmlChanges": html,
             "submitDate": article.submit_time,
             "editType": article.edit_type,
             "model": article.language_model,
             "temp": article.temp,
-            "customPrompt": article.custom_prompt
+            "customPrompt": article.custom_prompt,
+            "originalText": article.original_text
         })
     else:
         #** Need to get a proper error message sent through. Currently nothing renders on the page.

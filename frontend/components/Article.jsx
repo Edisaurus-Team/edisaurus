@@ -7,14 +7,15 @@ import { FaRegCopy } from "react-icons/fa";
 export default function Article() {
   const { id } = useParams()
   const [content, setContent] = useState([])
+  const [originalText, setOriginalText] = useState([])
   const [date, setDate] = useState()
   const [selectedNode, setSelectedNode] = useState()
   const [undoStack, setUndoStack] = useState([])
   const [view, setView] = useState('markup')
+  const [finalEdit, setFinalEdit] = useState(null)
   
   //not sure if these need to be set in state, since they never change.
   //may want to have a separate fetch function. 
-  const [finalEdit, setFinalEdit] = useState(null)
   const [editType, setEditType] = useState()
   const [model, setModel] = useState()
   const [temp, setTemp] = useState()
@@ -27,6 +28,7 @@ export default function Article() {
               const response = await fetch('/api/get_article/' + id)
               const data = await response.json()
               setContent(data.htmlChanges)
+              setOriginalText(data.originalText)
               setDate(data.submitDate)
               setEditType(data.editType)
               setModel(data.model)
@@ -63,11 +65,13 @@ export default function Article() {
     } else if (event.target.id == 'previousChange') {
       previousChange()
     } else if (event.target.id == 'markup') {
-      console.log('viewing markup')
-      setView('markup')
-    } else if (event.target.id == 'finalEdit') {
+      setView('markup') 
+    } else if (event.target.id == 'sideCompare') {
       setFinalEdit(processFinalText())
-      console.log("viewing final edit")
+      setView('sideCompare')
+    }
+      else if (event.target.id == 'finalEdit') {
+      setFinalEdit(processFinalText())
       setView('finalEdit')
     } else {
       if (selectedNode) {
@@ -226,6 +230,7 @@ export default function Article() {
         <div className='topLeft'>
           <button id='markup' className='articleTab articlePanelButton'>Markup</button>
           <button id='finalEdit' className='articleTab articlePanelButton'>Final Edit</button>
+          <button id='sideCompare' className='articleTab articlePanelButton'>Side-by-Side</button>
         </div>
         <div className='topRight'>
           <button id="copyFinalEdit" className='articleButton articlePanelButton' onClick={copyFinalEdit}><FaRegCopy /></button>
@@ -237,10 +242,13 @@ export default function Article() {
       </div>
       <div className='articleContent'>
         <div className='articleText'>
-          <div className='markupDisplay' style ={{display:(view == 'markup' ? 'block' : 'none')}}>
+          <div className='originalDisplay' style={{display:(view == 'sideCompare' ? 'block' : 'none')}}>
+            <p dangerouslySetInnerHTML={{__html: originalText}}></p>
+          </div>
+          <div className='markupDisplay' style={{display:(view == 'markup' ? 'block' : 'none')}}>
             <p dangerouslySetInnerHTML={{__html: content}}></p>
           </div>
-          <div className='finalEditDisplay' style={{display: (view == 'finalEdit' ? 'block' : 'none')}}>
+          <div className='finalEditDisplay' style={{display: (view == 'finalEdit' ? 'block' : (view == 'sideCompare' ? 'block' : 'none'))}}>
             <p dangerouslySetInnerHTML={{__html: finalEdit}}></p>
           </div>
         </div>
