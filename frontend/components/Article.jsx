@@ -27,8 +27,12 @@ export default function Article() {
           try {
               const response = await fetch('/api/get_article/' + id)
               const data = await response.json()
+              
+              // <br> tags are added into markup by diff-match-patch, but Original text just comes straight from what the user submitted
+              // so we are adding them here. Probably need a more concise way of applying uniform formatting in server-side code.
+              const ogText = data.originalText.replace(/\n/g, '<br><br>');
               setContent(data.htmlChanges)
-              setOriginalText(data.originalText)
+              setOriginalText(ogText)
               setDate(data.submitDate)
               setEditType(data.editType)
               setModel(data.model)

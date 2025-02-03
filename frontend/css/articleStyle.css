@@ -69,12 +69,35 @@
     justify-content:right;
 }
 
+.originalDisplay {
+    margin-right:20px;
+    min-width: 30vw;
+}
+
+.finalEditDisplay {
+    min-width:30vw;
+}
+
 .articleInfo {
     width:100%;
     text-align:right;
     max-width: 500px;
 
 }
+
+@media (max-width: 900px) {
+    .articleContent {
+        flex-direction: column-reverse;
+        margin-left:3vw;
+    }
+    .originalDisplay, .finalEditDisplay {
+        min-width: 45vw;
+    }
+    .articleInfo {
+        display: flex;
+    }
+}
+
 
 ins {
     background: rgb(150, 255, 150);
