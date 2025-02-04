@@ -1,7 +1,7 @@
 import React, { useState, useEffect,  } from 'react'
 import { useParams } from 'react-router-dom'
 import '../css/articleStyle.css'
-import { FaRegCopy } from "react-icons/fa";
+import { FaRegCopy, FaRegSave } from "react-icons/fa";
 
 
 export default function Article() {
@@ -90,6 +90,31 @@ export default function Article() {
     let copiedText = document.createElement('div')
     copiedText.innerHTML = processFinalText().replace(/<br>/g, '\n');
     navigator.clipboard.writeText(copiedText.innerText)
+  }
+
+  function saveChanges() {
+    const markupHtml = document.querySelector('.markupDisplay').innerHTML
+    //clean original
+    let originalText = document.createElement('div')
+    originalText.innerHTML = markupHtml
+    const remainingInserts = originalText.querySelectorAll('INS')
+    remainingInserts.forEach(ins => ins.remove())
+      
+    //clean edit side
+    let editedText = document.createElement('div')
+    editedText.innerHTML = markupHtml
+    const remainingDeletes = editedText.querySelectorAll('DEL')
+    remainingDeletes.forEach(del => del.remove())
+    fetch('/api/save_article/' + id, {
+      method: 'UPDATE',
+      headers : {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        updated_og_text: originalText.innerText,
+        updated_edited_text: editedText.innerText
+      })
+    })
   }
 
   async function selectNode(thisNode) {
@@ -237,7 +262,8 @@ export default function Article() {
           <button id='sideCompare' className='articleTab articlePanelButton'>Side-by-Side</button>
         </div>
         <div className='topRight'>
-          <button id="copyFinalEdit" className='articleButton articlePanelButton' onClick={copyFinalEdit}><FaRegCopy /></button>
+          <button id='save' className='articleButton articlePanelButton'><FaRegSave onClick={saveChanges} /></button>
+          <button id='copyFinalEdit' className='articleButton articlePanelButton' onClick={copyFinalEdit}><FaRegCopy /></button>
           <button id='acceptRemaining' className='articleButton articlePanelButton'>Accept Remaining Changes</button>
           <button id='previousChange' className='articleButton articlePanelButton'>Previous Change</button>
           <button id='nextChange' className='articleButton articlePanelButton'>Next Change</button>

@@ -3,6 +3,8 @@ from django.urls import path, re_path
 from . import views
 
 
+# *important note* server-side paths must match trailing slashes. <str:id> tags do not have trailing slashes for now.
+# otherwise, all Django paths should have a trailing slash just to be uniform.   
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -17,6 +19,7 @@ urlpatterns = [
     path('api/create_article/', views.create_article, name='create_article'),
     path('api/workshop_api/<str:id>', views.workshop_api, name='workshop_api'),
     path('api/stream_response/', views.stream_response, name='stream_response'),
+    path('api/save_article/<str:id>', views.save_article, name='save_article'),
     # **STOP FORGETTING YOUR COMMA IF YOU ADD ANOTHER URL TO THE BOTTOM OF THIS LIST**
     
     # all other paths are routed to react

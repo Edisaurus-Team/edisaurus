@@ -170,7 +170,6 @@ def get_article(request, id):
     article = Archive.objects.get(id=id)
     if article.user.id == request.user.id:
         html = create_html(article.diffs)
-        print(article.original_text)
         return JsonResponse({
             "htmlChanges": html,
             "submitDate": article.submit_time,
@@ -183,3 +182,19 @@ def get_article(request, id):
     else:
         #** Need to get a proper error message sent through. Currently nothing renders on the page.
         return HttpResponse("That is not your article")
+    
+@csrf_exempt
+def save_article(request, id):
+    if request.method == 'UPDATE':
+
+        article = Archive.objects.get(id=id)
+        if article.user.id == request.user.id:
+            data = json.loads(request.body.decode('utf-8'))
+            updated_og_text = data.get('updated_og_text', '')
+            updated_edited_text = data.get('updated_edited_text', '')
+            article.original_text = updated_og_text
+            article.edited_text = updated_edited_text
+            article.diffs = compare_text(updated_og_text, updated_edited_text)
+            article.save()
+
+            return HttpResponse(status=200)
