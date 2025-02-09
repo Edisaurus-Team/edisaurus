@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-// import React from "react"
 import Root from "./Root";
 import Home from "./components/Home";
 import About from "./components/About";
@@ -7,7 +6,6 @@ import WorkshopTable from "./components/WorkshopTable";
 import Settings from "./components/Settings";
 import Article from "./components/Article";
 import Uploader from "./components/Uploader";
-import Test from "./components/Test";
 
 const router = createBrowserRouter([
   {
@@ -37,10 +35,6 @@ const router = createBrowserRouter([
       {
         path: "/uploader",
         element: <Uploader />,
-      },
-      {
-        path: "/test/:id",
-        element: <Test />,
       }
     ],
   },
