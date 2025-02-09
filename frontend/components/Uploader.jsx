@@ -142,17 +142,18 @@ export default function Uploader() {
                     <div className="pageTitle">
                         <h1>Uploader</h1>
                     </div>
-                    {editChoice == "custom" && (
-                        <div className="form-group">
-                            <p>Prompt:</p>
-                            <textarea className="wide" type="text" rows="2" onChange={(event) => handlePromptChange(event)} placeholder="You are a professional copy editor who fixes typos and grammatical mistakes in text." />
-                        </div>
-                    )}
+
                     {formVisible && (
                         <form id="copyeditForm" method="post" onSubmit={fetchStream} encType="multipart/form-data">
+                            {editChoice == "custom" && (
+                                <div className="form-group">
+                                    <p>Prompt:</p>
+                                    <textarea className="wide" type="text" rows="2" onChange={(event) => handlePromptChange(event)} placeholder="You are a professional copy editor who fixes typos and grammatical mistakes in text." required />
+                                </div>
+                            )}
                             <h3>Paste text to be corrected</h3>
                             <div className="form-group">
-                                <textarea id="copyeditText" name="text_box"></textarea>
+                                <textarea id="copyeditText" name="text_box" required></textarea>
                             </div>
                             <div>
                                 <button className="btn btn-dark" type="submit" name="submitCopyedit" value="submitCopyedit">Submit text</button>    
