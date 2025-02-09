@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpRe
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
+from django.db import IntegrityError
 
 from .models import User, Archive
 from .functions import openai_call, compare_text, create_html
@@ -37,8 +38,6 @@ def login_view(request):
 @csrf_exempt
 def signup(request):
     if request.method == "POST":
-        # need to notify if a duplicate name is used
-        
         try:
             if request.POST["survey"]:
                 return render(request, "login.html", {
@@ -55,7 +54,13 @@ def signup(request):
                 "alert": "Passwords do not match."
             })
 
-        user = User.objects.create_user(username, email, password)
+        try:
+            user = User.objects.create_user(username, email, password)
+        except IntegrityError: 
+            return render(request, "signup.html", {
+                "alert": "Username already taken."
+            })
+        
         user.save()
         return HttpResponseRedirect(reverse("index"))
     else:
