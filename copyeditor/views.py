@@ -138,7 +138,7 @@ def create_article(request):
         temperature = float(data.get('temperature', ''))
         custom_prompt = data.get('custom_prompt', '')
 
-        # # create title from first 50 characters, or all that comes before a line break
+        # create title from first 50 characters, or all that comes before a line break
         title = edited_text[:50].split("\n")[0]
 
         diffs = compare_text(submit_text, edited_text)
