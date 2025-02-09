@@ -145,7 +145,7 @@ export default function Uploader() {
                     {editChoice == "custom" && (
                         <div className="form-group">
                             <p>Prompt:</p>
-                            <textarea className="wide-text" type="text" rows="2" onChange={(event) => handlePromptChange(event)} placeholder="You are a professional copy editor who fixes typos and grammatical mistakes in text." />
+                            <textarea className="wide" type="text" rows="2" onChange={(event) => handlePromptChange(event)} placeholder="You are a professional copy editor who fixes typos and grammatical mistakes in text." />
                         </div>
                     )}
                     {formVisible && (

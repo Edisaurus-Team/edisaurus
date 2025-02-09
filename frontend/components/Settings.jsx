@@ -55,20 +55,26 @@ export default function Settings() {
                 <h1>Settings for {content.user}</h1>
             </div>
             <div className="api-key-cont">
-                <h2 className="spaced-15px">API key: </h2>
-                <div className="api-key-data-and-form">
-                    <span className="api-key-data" style={{display: apiKeyDisplay ? 'none' : 'flex'}}>
-                        <p className="spaced-15px">{content.apiKey}</p>
-                        <FaPencilAlt className="api-key-edit" onClick={editKey} /></span>
-                    <form class="api-key-form" action="" method="post" style={{display: apiKeyDisplay ? 'block' : 'none'}}>
-                        <div class="form-group">
-                            <input id="api-key-input" class="form-control" type="text" name="api-key" placeholder="OpenAI API Key" onChange={updateApiKey} />
-                        </div>
-                        <div>
-                            <input id="api-form-submit" class="btn btn-dark" type="button" value="Submit" onClick={keySubmit}/>
-                            <input id="api-form-cancel" class="btn btn-light spaced-15px" type="button" value="Cancel" onClick={editKey} />
-                        </div>
-                    </form>
+                <div className="api-key-cont-inner">
+                    <h2 className="spaced-15px">API key: </h2>
+                    <div className="api-key-data-and-form">
+                        <span className="api-key-data" style={{display: apiKeyDisplay ? 'none' : 'flex'}}>
+                            <p className="spaced-15px">{content.apiKey}</p>
+                            <FaPencilAlt className="api-key-edit" onClick={editKey} /></span>
+                        <form class="api-key-form" action="" method="post" style={{display: apiKeyDisplay ? 'block' : 'none'}}>
+                            <div class="form-group">
+                                <input id="api-key-input" class="form-control" type="text" name="api-key" placeholder="OpenAI API Key" onChange={updateApiKey} />
+                            </div>
+                            <div>
+                                <input id="api-form-submit" class="btn btn-dark" type="button" value="Submit" onClick={keySubmit}/>
+                                <input id="api-form-cancel" class="btn btn-light spaced-15px" type="button" value="Cancel" onClick={editKey} />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div style={{color:"#5d5d5d"}}>
+                    <p>Saving your OpenAI API key is optional. If you don't provide one, your account will make use of site tokens.</p>
+                    <p>Site tokens are provided to all accounts for free, until the monthly amount depletes.</p>
                 </div>
             </div>
         </div>

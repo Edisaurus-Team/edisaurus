@@ -14,6 +14,10 @@ body {
   margin-inline:15px;
 }
 
+.wide {
+  width: 100%;
+}
+
 .padded-10px {
   padding:10px
 }
@@ -224,14 +228,16 @@ p {
 
 /* Settings */
 .api-key-cont {
+  background:rgb(215, 255, 255);
+  padding:2em;
+  border-radius: 20px;
   width:60%;
-  display: flex;
-  align-items:center;
   min-height:100px;
 }
 
-.api-key-data-and-form {
-  width:70%;
+.api-key-cont-inner {
+  display:flex;
+  margin-bottom:1.5em;
 }
 
 .api-key-cont:hover {
@@ -247,10 +253,3 @@ p {
   cursor: pointer;
 }
 
-.api-key-form {
-  width: 70%;
-}
-
-.wide-text {
-  width: 100%;
-}

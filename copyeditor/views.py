@@ -108,7 +108,7 @@ def stream_response(request):
         if edit_type == "custom":
             prompt = custom_prompt
 
-        submit_text = data.get('submit_text', '')   
+        submit_text = data.get('submit_text', '')
 
         key = request.user.key
         if key == '':
