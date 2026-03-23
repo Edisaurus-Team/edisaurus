@@ -2,7 +2,7 @@
 
 A copyediting tool, powered by AI!
 
-See the project here: <a href="https://copypasteeditor.com">copypasteeditor.com</a>
+See the project here: <a href="http://jtmoncri.pythonanywhere.com">http://jtmoncri.pythonanywhere.com/</a>
 
 ## Installation
 
