@@ -18,7 +18,6 @@ export default function Article() {
   //may want to have a separate fetch function. 
   const [editType, setEditType] = useState()
   const [model, setModel] = useState()
-  const [temp, setTemp] = useState()
   const [prompt, setPrompt] = useState()
 
 
@@ -36,7 +35,6 @@ export default function Article() {
               setDate(data.submitDate)
               setEditType(data.editType)
               setModel(data.model)
-              setTemp(data.temp)
               setPrompt(data.customPrompt)
           } catch (error) {
               console.error('Error:', error)
@@ -286,7 +284,6 @@ export default function Article() {
           <p><b>Submission Time</b><br/>{date}</p>
           <p><b>Edit Type</b><br/>{editType}</p>
           <p><b>Model Choice</b><br/>{model}</p>
-          <p><b>Temperature</b><br/>{temp}</p>
           {prompt != "" &&
             <p><b>Custom Prompt</b><br/>{prompt}</p>
           }

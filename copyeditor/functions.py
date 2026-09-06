@@ -1,37 +1,89 @@
 import re
+import anthropic
 
 from dotenv import load_dotenv
-from openai import OpenAI
 from diff_match_patch import diff_match_patch
 from json import dumps, loads
 
-def openai_call(prompt, submit_text, model, temperature, key):
+def get_max_output_tokens(client, model):
+    """Query the Models API for this model's real output-token ceiling."""
+    return client.models.retrieve(model).max_tokens
+
+
+def split_into_chunks(client, model, text, target_input_tokens):
     """
-    Called in 'uploader' in 'views.py'
+    Split `text` into chunks targeting roughly `target_input_tokens` tokens
+    each, breaking only on paragraph boundaries. Groups paragraphs with a
+    character-count heuristic, then verifies each candidate chunk's real
+    token count via count_tokens() before finalizing it.
+    """
+    parts = re.split(r'(\n\s*\n)', text)
+    pieces = [
+        parts[i] + (parts[i + 1] if i + 1 < len(parts) else '')
+        for i in range(0, len(parts), 2)
+    ]
+
+    char_budget = target_input_tokens * 4
+    chunks = []
+    current = []
+    current_chars = 0
+
+    for piece in pieces:
+        if current and current_chars + len(piece) > char_budget:
+            candidate = ''.join(current)
+            actual = client.messages.count_tokens(
+                model=model,
+                messages=[{"role": "user", "content": candidate}],
+            ).input_tokens
+            if actual > target_input_tokens and len(current) > 1:
+                overflow = current.pop()
+                chunks.append(''.join(current))
+                current = [overflow]
+                current_chars = len(overflow)
+            else:
+                chunks.append(candidate)
+                current = []
+                current_chars = 0
+        current.append(piece)
+        current_chars += len(piece)
+
+    if current:
+        chunks.append(''.join(current))
+
+    return chunks
+
+
+def llm_api_call(prompt, submit_text, model, key):
+    """
+    Called in 'uploader' in 'views.py'.
+    Splits long submissions into model-sized chunks and streams each
+    chunk's edited text back in sequence.
     """
     if key == False:
         # No key provided, relying on .env
         load_dotenv()
-        client = OpenAI()
+        client = anthropic.Anthropic()
     else:
         # User's personal key provided
-        client = OpenAI(api_key=key)
+        client = anthropic.Anthropic(api_key=key)
 
-    completion = client.chat.completions.create(
-        model=model,
-        messages=[
-            {"role": "system", "content": prompt},
-            {"role": "user", "content": submit_text}
-        ],
-        temperature=temperature,
-        stream=True
-    )
+    max_output = get_max_output_tokens(client, model)
+    chunks = split_into_chunks(client, model, submit_text, max_output // 2)
 
-    for chunk in completion:
-        content = chunk.choices[0].delta.content
-        if content:
-            yield content
-    
+    for i, chunk in enumerate(chunks):
+        if i > 0:
+            yield "\n\n"
+        with client.messages.stream(
+            model=model,
+            max_tokens=max_output,
+            system=prompt,
+            messages=[
+                {"role": "user", "content": chunk}
+            ],
+        ) as stream:
+            for text in stream.text_stream:
+                yield text
+
 
 
 def compare_text(original_text, edited_text):

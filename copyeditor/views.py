@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
 
 from .models import User, Archive
-from .functions import openai_call, compare_text, create_html
+from .functions import llm_api_call, compare_text, create_html
 
 @csrf_exempt
 def index(request):
@@ -103,7 +103,6 @@ def stream_response(request):
         
         edit_type = data.get('edit_type')
         custom_prompt = data.get('custom_prompt')
-        temperature = float(data.get('temperature'))
         model = data.get('model')
         
         if edit_type == "copyedit":
@@ -120,7 +119,7 @@ def stream_response(request):
             key = False
 
         # magic begins here :)
-        response = StreamingHttpResponse(openai_call(prompt, submit_text, model, temperature, key), content_type='text/plain')
+        response = StreamingHttpResponse(llm_api_call(prompt, submit_text, model, key), content_type='text/plain')
         response['Cache-Control'] = 'no-cache'
         
         return response
@@ -135,7 +134,6 @@ def create_article(request):
         edited_text = data.get('edited_text', '')
         edit_type = data.get('edit_type', '')
         model_choice = data.get('model_choice', '')
-        temperature = float(data.get('temperature', ''))
         custom_prompt = data.get('custom_prompt', '')
 
         # create title from first 50 characters, or all that comes before a line break
@@ -147,8 +145,7 @@ def create_article(request):
                                   original_text=submit_text, 
                                   edited_text=edited_text, 
                                   diffs=diffs, 
-                                  edit_type=edit_type, 
-                                  temp=temperature, 
+                                  edit_type=edit_type,
                                   language_model=model_choice,
                                   custom_prompt=custom_prompt
                                   )
@@ -180,7 +177,6 @@ def get_article(request, id):
             "submitDate": article.submit_time,
             "editType": article.edit_type,
             "model": article.language_model,
-            "temp": article.temp,
             "customPrompt": article.custom_prompt,
             "originalText": article.original_text
         })
