@@ -9,6 +9,8 @@
 
 # Wepback
 frontend/javascript/index-bundle.js
+static/index-bundle.js
+static/index-bundle.js.LICENSE.txt
 
 
 # source: https://github.com/github/gitignore/blob/main/Python.gitignore
