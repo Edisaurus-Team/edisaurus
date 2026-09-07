@@ -3,18 +3,13 @@
     color:aqua
 }
 
-.articlePanel {
-    display: flex;
-    justify-content: space-between; 
-    position:sticky;
-    width: 100%;
-    top:0;
-}
-.topLeft {
+.articleViews {
     margin-left:3vw;
 }
-.topRight {
-    margin-right:3vw;
+.editTools {
+    position:sticky;
+    top:0;
+    margin-left:3vw;
     padding-top:10px;
 }
 
@@ -46,6 +41,10 @@
     background-color:rgb(160, 255, 255);
 }
 
+.tabSelected {
+    background-color:rgb(160, 255, 255);
+}
+
 .reject:hover {
     background: rgb(255, 50, 50)
 }
@@ -56,12 +55,13 @@
 .articleContent {
     display: flex;
     gap:5vw;
+    width: 100%;
     margin-right:5vw;
-    margin-left:15vw;
+    margin-left:3vw;
     margin-top:50px;
     max-width: 100%;
     min-height: 50vh;
-    justify-content:right;
+    justify-content:flex-start;
 }
 
 .articleText {
@@ -83,11 +83,8 @@
     max-width: 50vw;
 }
 
-.articleInfo {
-    width:100%;
-    text-align:right;
-    max-width: 500px;
-
+.submissionDetailsDisplay {
+    max-width: 40vw;
 }
 
 @media (max-width: 900px) {
@@ -97,9 +94,6 @@
     }
     .originalDisplay, .finalEditDisplay {
         min-width: 45vw;
-    }
-    .articleInfo {
-        display: flex;
     }
 }
 

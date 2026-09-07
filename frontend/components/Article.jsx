@@ -15,8 +15,7 @@ export default function Article() {
   const [finalEdit, setFinalEdit] = useState(null)
   
   //not sure if these need to be set in state, since they never change.
-  //may want to have a separate fetch function. 
-  const [editType, setEditType] = useState()
+  //may want to have a separate fetch function.
   const [prompt, setPrompt] = useState()
 
 
@@ -32,7 +31,6 @@ export default function Article() {
               setContent(data.htmlChanges)
               setOriginalText(ogText)
               setDate(data.submitDate)
-              setEditType(data.editType)
               setPrompt(data.customPrompt)
           } catch (error) {
               console.error('Error:', error)
@@ -73,6 +71,8 @@ export default function Article() {
       else if (event.target.id == 'finalEdit') {
       setFinalEdit(processFinalText())
       setView('finalEdit')
+    } else if (event.target.id == 'submissionDetails') {
+      setView('submissionDetails')
     } else {
       if (selectedNode) {
         if (selectedNode.ins) selectedNode.ins.className = ''
@@ -251,20 +251,19 @@ export default function Article() {
 
   return (
     <div className='page-content' onClick={(event) => handleDocumentClick(event)}>
-      <div className='articlePanel'>
-        <div className='topLeft'>
-          <button id='markup' className='articleTab articlePanelButton'>Markup</button>
-          <button id='finalEdit' className='articleTab articlePanelButton'>Final Edit</button>
-          <button id='sideCompare' className='articleTab articlePanelButton'>Side-by-Side</button>
-        </div>
-        <div className='topRight'>
-          <button id='save' className='articleButton articlePanelButton'><FaRegSave onClick={saveChanges} /></button>
-          <button id='copyFinalEdit' className='articleButton articlePanelButton' onClick={copyFinalEdit}><FaRegCopy /></button>
-          <button id='acceptRemaining' className='articleButton articlePanelButton'>Accept Remaining Changes</button>
-          <button id='previousChange' className='articleButton articlePanelButton'>Previous Change</button>
-          <button id='nextChange' className='articleButton articlePanelButton'>Next Change</button>
-          <button id={undoStack.length > 0 ? null : 'undo-inactive'} className='articleButton articlePanelButton' onClick={undo}>Undo</button>
-        </div>
+      <div className='articleViews'>
+        <button id='markup' className={'articleTab articlePanelButton' + (view == 'markup' ? ' tabSelected' : '')}>Markup</button>
+        <button id='finalEdit' className={'articleTab articlePanelButton' + (view == 'finalEdit' ? ' tabSelected' : '')}>Final Edit</button>
+        <button id='sideCompare' className={'articleTab articlePanelButton' + (view == 'sideCompare' ? ' tabSelected' : '')}>Side-by-Side</button>
+        <button id='submissionDetails' className={'articleTab articlePanelButton' + (view == 'submissionDetails' ? ' tabSelected' : '')}>Submission Details</button>
+      </div>
+      <div className='editTools'>
+        <button id='previousChange' className='articleButton articlePanelButton'>Previous Change</button>
+        <button id='nextChange' className='articleButton articlePanelButton'>Next Change</button>
+        <button id={undoStack.length > 0 ? null : 'undo-inactive'} className='articleButton articlePanelButton' onClick={undo}>Undo</button>
+        <button id='acceptRemaining' className='articleButton articlePanelButton'>Accept Remaining Changes</button>
+        <button id='copyFinalEdit' className='articleButton articlePanelButton' onClick={copyFinalEdit}><FaRegCopy /></button>
+        <button id='save' className='articleButton articlePanelButton'><FaRegSave onClick={saveChanges} /></button>
       </div>
       <div className='articleContent'>
         <div className='articleText'>
@@ -277,13 +276,12 @@ export default function Article() {
           <div className='finalEditDisplay' style={{display: (view == 'finalEdit' ? 'block' : (view == 'sideCompare' ? 'block' : 'none'))}}>
             <p dangerouslySetInnerHTML={{__html: finalEdit}}></p>
           </div>
-        </div>
-        <div className="articleInfo">
-          <p><b>Submission Time</b><br/>{date}</p>
-          <p><b>Edit Type</b><br/>{editType}</p>
-          {prompt != "" &&
-            <p><b>Custom Prompt</b><br/>{prompt}</p>
-          }
+          <div className='submissionDetailsDisplay' style={{display:(view == 'submissionDetails' ? 'block' : 'none')}}>
+            <p><b>Submission Time</b><br/>{date}</p>
+            {prompt != "" &&
+              <p><b>Prompt</b><br/>{prompt}</p>
+            }
+          </div>
         </div>
       </div>
         {selectedNode &&      
