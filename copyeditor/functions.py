@@ -5,12 +5,15 @@ from dotenv import load_dotenv
 from diff_match_patch import diff_match_patch
 from json import dumps, loads
 
-def get_max_output_tokens(client, model):
-    """Query the Models API for this model's real output-token ceiling."""
-    return client.models.retrieve(model).max_tokens
+MODEL = "claude-haiku-4-5"
+MAX_OUTPUT_TOKENS = 64000
+
+# def get_max_output_tokens(client):
+#     """Query the Models API for this model's real output-token ceiling."""
+#     return client.models.retrieve(MODEL).max_tokens
 
 
-def split_into_chunks(client, model, text, target_input_tokens):
+def split_into_chunks(client, text, target_input_tokens):
     """
     Split `text` into chunks targeting roughly `target_input_tokens` tokens
     each, breaking only on paragraph boundaries. Groups paragraphs with a
@@ -32,7 +35,7 @@ def split_into_chunks(client, model, text, target_input_tokens):
         if current and current_chars + len(piece) > char_budget:
             candidate = ''.join(current)
             actual = client.messages.count_tokens(
-                model=model,
+                model=MODEL,
                 messages=[{"role": "user", "content": candidate}],
             ).input_tokens
             if actual > target_input_tokens and len(current) > 1:
@@ -53,7 +56,7 @@ def split_into_chunks(client, model, text, target_input_tokens):
     return chunks
 
 
-def llm_api_call(prompt, submit_text, model, key):
+def llm_api_call(prompt, submit_text, key):
     """
     Called in 'uploader' in 'views.py'.
     Splits long submissions into model-sized chunks and streams each
@@ -67,15 +70,14 @@ def llm_api_call(prompt, submit_text, model, key):
         # User's personal key provided
         client = anthropic.Anthropic(api_key=key)
 
-    max_output = get_max_output_tokens(client, model)
-    chunks = split_into_chunks(client, model, submit_text, max_output // 2)
+    chunks = split_into_chunks(client, submit_text, MAX_OUTPUT_TOKENS // 2)
 
     for i, chunk in enumerate(chunks):
         if i > 0:
             yield "\n\n"
         with client.messages.stream(
-            model=model,
-            max_tokens=max_output,
+            model=MODEL,
+            max_tokens=MAX_OUTPUT_TOKENS,
             system=prompt,
             messages=[
                 {"role": "user", "content": chunk}

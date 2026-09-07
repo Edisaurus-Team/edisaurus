@@ -17,5 +17,4 @@ class Archive(models.Model):
 
     #submission info
     edit_type = models.CharField(max_length=1000, blank=True)
-    language_model = models.CharField(max_length=50, blank=True)
     custom_prompt = models.CharField(max_length=1000, blank=True)

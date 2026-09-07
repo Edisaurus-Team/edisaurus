@@ -4,12 +4,10 @@ import { FaArrowLeft, FaAnglesRight } from "react-icons/fa6";
 
 export default function Uploader() {
     const [response, setResponse] = useState('');
-    const [modelChoice, setModelChoice] = useState('claude-sonnet-5')
-    const [editChoice, setEditChoice] = useState('copyedit')
     const [leftPanelExpanded, setLeftPanelExpanded] = useState(false);
     const [windowExpanded, setWindowExpanded] = useState(window.innerWidth > 1049)
     const [formVisible, setFormVisible] = useState(true)
-    const [customPrompt, setCustomPrompt] = useState("")
+    const [customPrompt, setCustomPrompt] = useState("You are a professional copy editor who fixes typos and grammatical mistakes in text. Follow the Chicago Manual of Style for making corrections. Make MINIMAL edits to the voice or style of the prose, only correcting obvious errors. Return the text in its final corrected form, with no additional markup. The text will be compared to the original with a diff library. It must match the original text exactly, other than the needed corrections.")
 
     async function fetchStream(event) {
         event.preventDefault();
@@ -22,8 +20,6 @@ export default function Uploader() {
             },
             body: JSON.stringify({ 
                 submit_text: inputText,
-                edit_type: editChoice,
-                model: modelChoice,
                 custom_prompt: customPrompt
             }),
         });
@@ -60,8 +56,6 @@ export default function Uploader() {
             body: JSON.stringify({ 
                 submit_text: inputText,
                 edited_text: outputText,
-                edit_type: editChoice,
-                model_choice: modelChoice,
                 custom_prompt: customPrompt
             }),
         });
@@ -72,15 +66,11 @@ export default function Uploader() {
     function leftExpand(event) {
         setLeftPanelExpanded(leftPanelExpanded == true ? false : true)
     }
-
-    function handleEditChange(event) {
-        setEditChoice(event.target.value)
-    }
-    function handleModelChange(event) {
-        setModelChoice(event.target.value)
-    }
     function handlePromptChange(event) {
         setCustomPrompt(event.target.value)
+    }
+    function handlePromptFocus(event) {
+        event.target.select()
     }
 
     return (
@@ -94,23 +84,7 @@ export default function Uploader() {
                         visibility:(windowExpanded ? 'visible' : (leftPanelExpanded ? 'visible' : 'hidden'))
                     }}>
                     <div style={{marginBottom:"20px"}}>
-                        <h3>settings</h3>
-                    </div>
-                    <div className="leftPanelItem">
-                        <p>Choose edit type</p>
-                        <select id="edit-choice" className="leftPanelInput" name="edit-choice" onChange={(event) => handleEditChange(event)}>
-                            <option value="copyedit">Copyedit</option>
-                            <option value="resume">Edit a resume</option>
-                            <option value="custom">Custom Prompt</option>
-                        </select>
-                    </div>
-                    <div className="leftPanelItem">
-                        <p>Choose model</p>
-                        <select id="model-choice" className="leftPanelInput" name="model-choice" onChange={(event) => handleModelChange(event)}>
-                            <option value="claude-sonnet-5">Claude Sonnet 5</option>
-                            <option value="claude-haiku-4-5">Claude Haiku 4.5</option>
-
-                        </select>
+                        <h3>Files</h3>
                     </div>
                     <div id="panelClose" onClick={leftExpand}>
                         <FaArrowLeft style={{fontSize:'30px'}} />
@@ -118,18 +92,12 @@ export default function Uploader() {
                 </div>
 
                 <div className="pageRight" style={{visibility:(windowExpanded ? 'visible' : (leftPanelExpanded ? 'hidden' : 'visible'))}}>
-                    <div className="pageTitle">
-                        <h1>Uploader</h1>
-                    </div>
-
                     {formVisible && (
                         <form id="copyeditForm" method="post" onSubmit={fetchStream} encType="multipart/form-data">
-                            {editChoice == "custom" && (
-                                <div className="form-group">
-                                    <p>Prompt:</p>
-                                    <textarea className="wide" type="text" rows="2" onChange={(event) => handlePromptChange(event)} placeholder="You are a professional copy editor who fixes typos and grammatical mistakes in text." required />
-                                </div>
-                            )}
+                            <div className="form-group">
+                                <p>Prompt:</p>
+                                <textarea className="wide" type="text" rows="2" onChange={(event) => handlePromptChange(event)} onFocus={handlePromptFocus} value={customPrompt} required />
+                            </div>
                             <h3>Paste text to be corrected</h3>
                             <div className="form-group">
                                 <textarea id="copyeditText" name="text_box" required></textarea>

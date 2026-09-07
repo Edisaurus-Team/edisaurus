@@ -7,6 +7,11 @@ module.exports = {
     path: path.resolve(__dirname, "./static"), // path to our Django static directory
   },
 
+  // cache build results on disk so unchanged modules skip recompilation on the next run
+  cache: {
+    type: "filesystem",
+  },
+
   // use Babel's env and react presets to compile all .js and .jsx files that aren't inside the node_modules directory
   module: {
     rules: [

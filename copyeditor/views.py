@@ -100,18 +100,7 @@ def stream_response(request):
     if request.method == "POST":   
         
         data = json.loads(request.body.decode('utf-8'))
-        
-        edit_type = data.get('edit_type')
-        custom_prompt = data.get('custom_prompt')
-        model = data.get('model')
-        
-        if edit_type == "copyedit":
-            prompt = "You are a professional copy editor who fixes typos and grammatical mistakes in text. You follow the Chicago Manual of Style for making corrections. You make MINIMAL edits to the voice or style of the prose, only correcting when there are obvious errors."
-        if edit_type == "resume":
-            prompt = "You are a professional recruiter who fixes resumes. You review text for consistency in punctuation, dates, and verb usage. Current job positions should be expressed in present tense. Past positions should be expressed in past tense. Strengthen the language to sound more professional when necessary. Fragmented sentences are acceptable."
-        if edit_type == "custom":
-            prompt = custom_prompt
-
+        prompt = data.get('custom_prompt')
         submit_text = data.get('submit_text', '')
 
         key = request.user.key
@@ -119,7 +108,7 @@ def stream_response(request):
             key = False
 
         # magic begins here :)
-        response = StreamingHttpResponse(llm_api_call(prompt, submit_text, model, key), content_type='text/plain')
+        response = StreamingHttpResponse(llm_api_call(prompt, submit_text, key), content_type='text/plain')
         response['Cache-Control'] = 'no-cache'
         
         return response
@@ -132,8 +121,6 @@ def create_article(request):
         data = json.loads(request.body.decode('utf-8'))
         submit_text = data.get('submit_text', '')
         edited_text = data.get('edited_text', '')
-        edit_type = data.get('edit_type', '')
-        model_choice = data.get('model_choice', '')
         custom_prompt = data.get('custom_prompt', '')
 
         # create title from first 50 characters, or all that comes before a line break
@@ -144,9 +131,7 @@ def create_article(request):
                                   title=title, 
                                   original_text=submit_text, 
                                   edited_text=edited_text, 
-                                  diffs=diffs, 
-                                  edit_type=edit_type,
-                                  language_model=model_choice,
+                                  diffs=diffs,
                                   custom_prompt=custom_prompt
                                   )
         save_in_archive.save()
@@ -175,8 +160,6 @@ def get_article(request, id):
         return JsonResponse({
             "htmlChanges": html,
             "submitDate": article.submit_time,
-            "editType": article.edit_type,
-            "model": article.language_model,
             "customPrompt": article.custom_prompt,
             "originalText": article.original_text
         })

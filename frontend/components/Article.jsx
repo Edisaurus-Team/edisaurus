@@ -17,7 +17,6 @@ export default function Article() {
   //not sure if these need to be set in state, since they never change.
   //may want to have a separate fetch function. 
   const [editType, setEditType] = useState()
-  const [model, setModel] = useState()
   const [prompt, setPrompt] = useState()
 
 
@@ -34,7 +33,6 @@ export default function Article() {
               setOriginalText(ogText)
               setDate(data.submitDate)
               setEditType(data.editType)
-              setModel(data.model)
               setPrompt(data.customPrompt)
           } catch (error) {
               console.error('Error:', error)
@@ -283,11 +281,9 @@ export default function Article() {
         <div className="articleInfo">
           <p><b>Submission Time</b><br/>{date}</p>
           <p><b>Edit Type</b><br/>{editType}</p>
-          <p><b>Model Choice</b><br/>{model}</p>
           {prompt != "" &&
             <p><b>Custom Prompt</b><br/>{prompt}</p>
           }
-
         </div>
       </div>
         {selectedNode &&      
