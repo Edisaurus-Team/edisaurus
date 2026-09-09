@@ -3,6 +3,27 @@
     color:aqua
 }
 
+.page-content.articleLayout {
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+    gap: 0;
+}
+
+.articleSidePanel {
+    width: 24vw;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+    position: sticky;
+    top: 1rem;
+    margin-left: 1vw;
+}
+
+.articleMain {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
 .articleViews {
     margin-left:3vw;
 }
@@ -88,6 +109,19 @@
 }
 
 @media (max-width: 900px) {
+    .page-content.articleLayout {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+    }
+    .articleSidePanel {
+        flex: none;
+        max-width: 100%;
+        max-height: 200px;
+        position: static;
+        margin-left: 0;
+        margin-bottom: 1rem;
+    }
     .articleContent {
         flex-direction: column-reverse;
         margin-left:3vw;

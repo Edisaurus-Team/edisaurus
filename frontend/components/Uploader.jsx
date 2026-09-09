@@ -1,4 +1,5 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
+import WorkshopTable from './WorkshopTable'
 import "../css/uploaderStyle.css"
 import { FaArrowLeft, FaAnglesRight } from "react-icons/fa6";
 
@@ -8,6 +9,7 @@ export default function Uploader() {
     const [windowExpanded, setWindowExpanded] = useState(window.innerWidth > 1049)
     const [formVisible, setFormVisible] = useState(true)
     const [customPrompt, setCustomPrompt] = useState("You are a professional copy editor who fixes typos and grammatical mistakes in text. Follow the Chicago Manual of Style for making corrections. Make MINIMAL edits to the voice or style of the prose, only correcting obvious errors. Return the text in its final corrected form, with no additional markup. The text will be compared to the original with a diff library. It must match the original text exactly, other than the needed corrections.")
+    const promptRef = useRef(null);
 
     async function fetchStream(event) {
         event.preventDefault();
@@ -40,12 +42,19 @@ export default function Uploader() {
     useEffect(() => {
         const handleResize = () => {
           setWindowExpanded(window.innerWidth > 1049);
-        };    
+        };
         window.addEventListener('resize', handleResize);
         return () => {
           window.removeEventListener('resize', handleResize);
         };
     }, []);
+
+    useEffect(() => {
+        if (promptRef.current) {
+            promptRef.current.style.height = 'auto';
+            promptRef.current.style.height = promptRef.current.scrollHeight + 'px';
+        }
+    }, [customPrompt]);
     
     async function saveAndRedirect(inputText, outputText) {
         const newArticle = await fetch('/api/create_article/', {
@@ -72,6 +81,10 @@ export default function Uploader() {
     function handlePromptFocus(event) {
         event.target.select()
     }
+    function handleTextareaResize(event) {
+        event.target.style.height = 'auto';
+        event.target.style.height = event.target.scrollHeight + 'px';
+    }
 
     return (
         <div className="page-content">    
@@ -79,15 +92,17 @@ export default function Uploader() {
                 <div className="pageLeftExpand" onClick={leftExpand} style={leftPanelExpanded ? {visibility:'hidden'} : {visibility: 'visible'}}>
                     <FaAnglesRight style={{fontSize:'30px'}} />    
                 </div>
+                <div id="panelClose" onClick={leftExpand}>
+                    <FaArrowLeft style={{fontSize:'30px'}} />
+                </div>
                 <div id="pageLeft" className="pageLeft" 
                     style={{
                         visibility:(windowExpanded ? 'visible' : (leftPanelExpanded ? 'visible' : 'hidden'))
                     }}>
                     <div style={{marginBottom:"20px"}}>
-                        <h3>Files</h3>
-                    </div>
-                    <div id="panelClose" onClick={leftExpand}>
-                        <FaArrowLeft style={{fontSize:'30px'}} />
+                      <WorkshopTable embedded style={{
+                        visibility:(windowExpanded ? 'visible' : (leftPanelExpanded ? 'visible' : 'hidden'))
+                        }} />  
                     </div>
                 </div>
 
@@ -96,11 +111,11 @@ export default function Uploader() {
                         <form id="copyeditForm" method="post" onSubmit={fetchStream} encType="multipart/form-data">
                             <div className="form-group">
                                 <p>Prompt:</p>
-                                <textarea className="wide" type="text" rows="2" onChange={(event) => handlePromptChange(event)} onFocus={handlePromptFocus} value={customPrompt} required />
+                                <textarea ref={promptRef} className="wide auto-grow copyedit-textarea" type="text" onChange={(event) => handlePromptChange(event)} onFocus={handlePromptFocus} value={customPrompt} required />
                             </div>
-                            <h3>Paste text to be corrected</h3>
-                            <div className="form-group">
-                                <textarea id="copyeditText" name="text_box" required></textarea>
+                            <div id="submit-box" className="form-group">
+                                <h3>Paste text to be corrected:</h3>
+                                <textarea id="copyeditText" className="auto-grow copyedit-textarea" onInput={handleTextareaResize} name="text_box" required></textarea>
                             </div>
                             <div>
                                 <button className="btn btn-dark" type="submit" name="submitCopyedit" value="submitCopyedit">Submit text</button>    

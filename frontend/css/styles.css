@@ -22,6 +22,11 @@ body {
   padding:10px
 }
 
+textarea {
+  max-width: 850px;
+  padding: 0 10px 10px 10px;
+}
+
 /* navbar styling */
 nav {
   display: flex;
@@ -116,7 +121,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 1rem 10vw 2rem 10vw;
+  margin: 1rem;
   min-height:60vh;
 }
 

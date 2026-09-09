@@ -1,5 +1,6 @@
 import React, { useState, useEffect,  } from 'react'
 import { useParams } from 'react-router-dom'
+import WorkshopTable from './WorkshopTable'
 import '../css/articleStyle.css'
 import { FaRegCopy, FaRegSave } from "react-icons/fa";
 
@@ -250,49 +251,54 @@ export default function Article() {
   }
 
   return (
-    <div className='page-content' onClick={(event) => handleDocumentClick(event)}>
-      <div className='articleViews'>
-        <button id='markup' className={'articleTab articlePanelButton' + (view == 'markup' ? ' tabSelected' : '')}>Markup</button>
-        <button id='finalEdit' className={'articleTab articlePanelButton' + (view == 'finalEdit' ? ' tabSelected' : '')}>Final Edit</button>
-        <button id='sideCompare' className={'articleTab articlePanelButton' + (view == 'sideCompare' ? ' tabSelected' : '')}>Side-by-Side</button>
-        <button id='submissionDetails' className={'articleTab articlePanelButton' + (view == 'submissionDetails' ? ' tabSelected' : '')}>Submission Details</button>
+    <div className='page-content articleLayout'>
+      <div className='articleSidePanel'>
+        <WorkshopTable embedded activeId={id} />
       </div>
-      <div className='editTools'>
-        <button id='previousChange' className='articleButton articlePanelButton'>Previous Change</button>
-        <button id='nextChange' className='articleButton articlePanelButton'>Next Change</button>
-        <button id={undoStack.length > 0 ? null : 'undo-inactive'} className='articleButton articlePanelButton' onClick={undo}>Undo</button>
-        <button id='acceptRemaining' className='articleButton articlePanelButton'>Accept Remaining Changes</button>
-        <button id='copyFinalEdit' className='articleButton articlePanelButton' onClick={copyFinalEdit}><FaRegCopy /></button>
-        <button id='save' className='articleButton articlePanelButton'><FaRegSave onClick={saveChanges} /></button>
-      </div>
-      <div className='articleContent'>
-        <div className='articleText'>
-          <div className='originalDisplay' style={{display:(view == 'sideCompare' ? 'block' : 'none')}}>
-            <p dangerouslySetInnerHTML={{__html: originalText}}></p>
-          </div>
-          <div className='markupDisplay' style={{display:(view == 'markup' ? 'block' : 'none')}}>
-            <p dangerouslySetInnerHTML={{__html: content}}></p>
-          </div>
-          <div className='finalEditDisplay' style={{display: (view == 'finalEdit' ? 'block' : (view == 'sideCompare' ? 'block' : 'none'))}}>
-            <p dangerouslySetInnerHTML={{__html: finalEdit}}></p>
-          </div>
-          <div className='submissionDetailsDisplay' style={{display:(view == 'submissionDetails' ? 'block' : 'none')}}>
-            <p><b>Submission Time</b><br/>{date}</p>
-            {prompt != "" &&
-              <p><b>Prompt</b><br/>{prompt}</p>
-            }
+      <div className='articleMain' onClick={(event) => handleDocumentClick(event)}>
+        <div className='articleViews'>
+          <button id='markup' className={'articleTab articlePanelButton' + (view == 'markup' ? ' tabSelected' : '')}>Markup</button>
+          <button id='finalEdit' className={'articleTab articlePanelButton' + (view == 'finalEdit' ? ' tabSelected' : '')}>Final Edit</button>
+          <button id='sideCompare' className={'articleTab articlePanelButton' + (view == 'sideCompare' ? ' tabSelected' : '')}>Side-by-Side</button>
+          <button id='submissionDetails' className={'articleTab articlePanelButton' + (view == 'submissionDetails' ? ' tabSelected' : '')}>Submission Details</button>
+        </div>
+        <div className='editTools'>
+          <button id='previousChange' className='articleButton articlePanelButton'>Previous Change</button>
+          <button id='nextChange' className='articleButton articlePanelButton'>Next Change</button>
+          <button id={undoStack.length > 0 ? null : 'undo-inactive'} className='articleButton articlePanelButton' onClick={undo}>Undo</button>
+          <button id='acceptRemaining' className='articleButton articlePanelButton'>Accept Remaining Changes</button>
+          <button id='copyFinalEdit' className='articleButton articlePanelButton' onClick={copyFinalEdit}><FaRegCopy /></button>
+          <button id='save' className='articleButton articlePanelButton'><FaRegSave onClick={saveChanges} /></button>
+        </div>
+        <div className='articleContent'>
+          <div className='articleText'>
+            <div className='originalDisplay' style={{display:(view == 'sideCompare' ? 'block' : 'none')}}>
+              <p dangerouslySetInnerHTML={{__html: originalText}}></p>
+            </div>
+            <div className='markupDisplay' style={{display:(view == 'markup' ? 'block' : 'none')}}>
+              <p dangerouslySetInnerHTML={{__html: content}}></p>
+            </div>
+            <div className='finalEditDisplay' style={{display: (view == 'finalEdit' ? 'block' : (view == 'sideCompare' ? 'block' : 'none'))}}>
+              <p dangerouslySetInnerHTML={{__html: finalEdit}}></p>
+            </div>
+            <div className='submissionDetailsDisplay' style={{display:(view == 'submissionDetails' ? 'block' : 'none')}}>
+              <p><b>Submission Time</b><br/>{date}</p>
+              {prompt != "" &&
+                <p><b>Prompt</b><br/>{prompt}</p>
+              }
+            </div>
           </div>
         </div>
+          {selectedNode &&
+          <div className='nodePanel' style={{position: 'absolute',
+            top: (selectedNode.del ? selectedNode.del.offsetTop : selectedNode.ins.offsetTop) + 25,
+            left: (selectedNode.del ? selectedNode.del.offsetLeft : selectedNode.ins.offsetLeft),
+            display: 'inline-flex'
+          }}>
+              <button className='articleButton reject' onClick={reject}>Reject</button>
+              <button className='articleButton accept' onClick={accept}>Accept</button>
+        </div>}
       </div>
-        {selectedNode &&      
-        <div className='nodePanel' style={{position: 'absolute', 
-          top: (selectedNode.del ? selectedNode.del.offsetTop : selectedNode.ins.offsetTop) + 25, 
-          left: (selectedNode.del ? selectedNode.del.offsetLeft : selectedNode.ins.offsetLeft),
-          display: 'inline-flex'
-        }}>
-            <button className='articleButton reject' onClick={reject}>Reject</button>      
-            <button className='articleButton accept' onClick={accept}>Accept</button>
-      </div>}
     </div>
   )
 }

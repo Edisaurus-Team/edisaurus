@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 class User(AbstractUser):
-    key = models.CharField(max_length=100, blank=True, default="")
+    pass
 
 class Archive(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

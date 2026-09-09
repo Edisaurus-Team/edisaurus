@@ -14,10 +14,25 @@ tr:hover {
     }
 }
 
+table {
+    width: 100%;
+    table-layout: auto;
+}
+
+/* icon columns shrink to fit their content; title column absorbs the rest */
+td:nth-child(2),
+td:nth-child(3) {
+    width: 1%;
+    white-space: nowrap;
+}
+
 .workshop-table-article {
     font-size: 30px;
     margin-top: 10px;
     padding-inline: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .workshop-table-article a:link,
@@ -45,4 +60,24 @@ tr:hover {
     margin-right: 2vw;
     height: 25px;
     width: 450px;
+}
+
+.workshop-table-article.active {
+    background-color: rgb(160, 255, 255);
+    border-radius: 8px;
+}
+
+.workshop-table-embedded {
+    width: 100%;
+}
+.workshop-table-embedded tr {
+    font-size: 14px;
+}
+.workshop-table-embedded .workshop-table-article {
+    font-size: 15px;
+    margin-top: 4px;
+    padding-inline: 5px;
+}
+.workshop-table-embedded .icon {
+    height: 16px;
 }

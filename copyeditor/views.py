@@ -78,23 +78,6 @@ def get_table(request):
 
 
 @csrf_exempt
-def settings(request):
-    data = User.objects.get(username=request.user, key=request.user.key)
-    if request.method == "GET":
-        
-        return JsonResponse( {
-            "user": data.username,
-            "apiKey": data.key
-        })
-    if request.method == "POST":
-        updated_data = json.loads(request.body.decode('utf-8'))
-        key = updated_data.get('updated_key')
-        data.key = key.strip()
-        data.save()
-        return HttpResponse(status=200)
-
-
-@csrf_exempt
 def stream_response(request):
     # Uploader
     if request.method == "POST":   
@@ -103,12 +86,8 @@ def stream_response(request):
         prompt = data.get('custom_prompt')
         submit_text = data.get('submit_text', '')
 
-        key = request.user.key
-        if key == '':
-            key = False
-
         # magic begins here :)
-        response = StreamingHttpResponse(llm_api_call(prompt, submit_text, key), content_type='text/plain')
+        response = StreamingHttpResponse(llm_api_call(prompt, submit_text), content_type='text/plain')
         response['Cache-Control'] = 'no-cache'
         
         return response

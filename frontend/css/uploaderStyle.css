@@ -2,6 +2,19 @@
     width:100%;
 }
 
+.auto-grow {
+    overflow-y: auto;
+    resize: none;
+    box-sizing: border-box;
+    max-height: 85vh;
+}
+
+.copyedit-textarea {
+    width: 100%;
+    max-width: 850px;
+    box-sizing: border-box;
+}
+
 .pageLeftExpand {
     display:none;
     float: left;
@@ -40,9 +53,7 @@
     padding-left: calc(20px + 3vw);
     width:calc(80px + 60vw);
     #copyeditText {
-        width: 100%;
-        height: 400px;
-        max-width:800px;
+        min-height: 400px;
     }
 }
 

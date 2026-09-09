@@ -56,19 +56,16 @@ def split_into_chunks(client, text, target_input_tokens):
     return chunks
 
 
-def llm_api_call(prompt, submit_text, key):
+def llm_api_call(prompt, submit_text):
     """
     Called in 'uploader' in 'views.py'.
     Splits long submissions into model-sized chunks and streams each
     chunk's edited text back in sequence.
     """
-    if key == False:
-        # No key provided, relying on .env
-        load_dotenv()
-        client = anthropic.Anthropic()
-    else:
-        # User's personal key provided
-        client = anthropic.Anthropic(api_key=key)
+    # set API key from .env file or environment variables
+    load_dotenv()
+    
+    client = anthropic.Anthropic()
 
     chunks = split_into_chunks(client, submit_text, MAX_OUTPUT_TOKENS // 2)
 

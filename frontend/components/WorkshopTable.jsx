@@ -4,7 +4,7 @@ import { FaCheck } from "react-icons/fa6";
 
 import "../css/workshopTableStyle.css"
 
-export default function Table () {
+export default function Table ({ embedded = false, activeId } = {}) {
 
     const [content, setContent] = useState([]);
     const [clickedIcon, setClickedIcon] = useState([]);
@@ -43,48 +43,56 @@ export default function Table () {
         })
     }
 
+  const tableElement = (
+    <table className={embedded ? 'workshop-table-embedded' : undefined}>
+      <thead>
+        <tr>
+          <th>Your Articles</th>
+        </tr>
+      </thead>
+    <tbody>
+        {content.map(article => (
+        <tr key={article.id}>
+          {/* TITLE */}
+          <td>
+            <div className={"workshop-table-article aqua-hover" + (article.id == activeId ? " active" : "")}><a href={`/workshop/${article.id}`}>{article.title}</a></div>
+          </td>
+          {/* TRASH CAN */}
+          <td>
+            <div className="trash-can red-hover spaced-15px padded-10px">
+              <div
+                className={article.id === clickedIcon.id ? "trash-wrapper selected" : "trash-wrapper"}
+                onClick={() => handleTrashIconClick(article.id)}
+              >
+                <FaRegTrashCan className="icon trash-icon" />
+              </div>
+            </div>
+          </td>
+          <td>
+            <div className="delete-confirmation"
+              style={{visibility: article.id == clickedIcon.id ? 'visible' : 'hidden'}}
+              onClick={() => deleteArticle(article.id)}
+            >
+              <FaCheck
+                className="icon check-icon"
+              />
+            </div>
+
+          </td>
+        </tr>
+        ))}
+    </tbody>
+    </table>
+  )
+
+  if (embedded) {
+    return tableElement
+  }
+
   return (
     <div className="page-content">
       <h1>Workshop Dashboard</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Your Articles</th>
-          </tr>
-        </thead>
-      <tbody>
-          {content.map(article => (
-          <tr key={article.id}>
-            {/* TITLE */}
-            <td>
-              <div className="workshop-table-article aqua-hover"><a href={`/workshop/${article.id}`}>{article.title}</a></div>
-            </td>
-            {/* TRASH CAN */}
-            <td>
-              <div className="red-hover spaced-15px padded-10px">
-                <div 
-                  className={article.id === clickedIcon.id ? "trash-wrapper selected" : "trash-wrapper"} 
-                  onClick={() => handleTrashIconClick(article.id)}
-                >
-                  <FaRegTrashCan className="icon trash-icon" />
-                </div>
-              </div> 
-            </td>
-            <td>
-              <div  
-                style={{visibility: article.id == clickedIcon.id ? 'visible' : 'hidden'}}
-                onClick={() => deleteArticle(article.id)}
-              >
-                <FaCheck  
-                  className="icon check-icon"
-                />
-              </div>
-
-            </td>
-          </tr>
-          ))}
-      </tbody>
-      </table>
+      {tableElement}
     </div>
   )
 }
