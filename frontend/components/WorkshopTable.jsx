@@ -91,8 +91,10 @@ export default function Table ({ embedded = false, activeId } = {}) {
 
   return (
     <div className="page-content">
-      <h1>Workshop Dashboard</h1>
-      {tableElement}
+      <div className="workshop-page">
+        <h1>Workshop Dashboard</h1>
+        {tableElement}
+      </div>
     </div>
   )
 }

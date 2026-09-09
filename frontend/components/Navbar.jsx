@@ -16,14 +16,11 @@ export default function Navbar() {
           <NavLink className="navItem spaced-15px" to="/workshop/">
             Workshop
           </NavLink>
+      </div>
+      <div className="navAccount">
           <NavLink className="navItem" to="/about/">
             About
           </NavLink>
-      </div>
-      <div className="navAccount">
-        <NavLink className="accountItem" to="/settings/">
-          Settings
-        </NavLink>
         <a className="accountItem" href="/logout/">Logout</a>
       </div>
     </nav>

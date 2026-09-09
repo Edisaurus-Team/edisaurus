@@ -88,6 +88,7 @@
 .articleText {
     display: flex;
     justify-content:right;
+    max-width:850px;
 }
 
 .originalDisplay {
