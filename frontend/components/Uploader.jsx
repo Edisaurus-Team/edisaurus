@@ -1,12 +1,11 @@
 import React, {useState, useEffect, useRef} from "react";
 import WorkshopTable from './WorkshopTable'
 import "../css/uploaderStyle.css"
-import { FaArrowLeft, FaAnglesRight } from "react-icons/fa6";
+import { FaBars, FaXmark } from "react-icons/fa6";
 
 export default function Uploader() {
     const [response, setResponse] = useState('');
     const [leftPanelExpanded, setLeftPanelExpanded] = useState(false);
-    const [windowExpanded, setWindowExpanded] = useState(window.innerWidth > 1049)
     const [formVisible, setFormVisible] = useState(true)
     const [customPrompt, setCustomPrompt] = useState("You are a professional copy editor who fixes typos and grammatical mistakes in text. Follow the Chicago Manual of Style for making corrections. Make MINIMAL edits to the voice or style of the prose, only correcting obvious errors. Return the text in its final corrected form, with no additional markup. The text will be compared to the original with a diff library. It must match the original text exactly, other than the needed corrections.")
     const promptRef = useRef(null);
@@ -20,12 +19,12 @@ export default function Uploader() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 submit_text: inputText,
                 custom_prompt: customPrompt
             }),
         });
-    
+
         //stream response from OpenAI onto the page
         const reader = response.body.getReader();
         const decoder = new TextDecoder('utf-8');
@@ -40,29 +39,19 @@ export default function Uploader() {
     };
 
     useEffect(() => {
-        const handleResize = () => {
-          setWindowExpanded(window.innerWidth > 1049);
-        };
-        window.addEventListener('resize', handleResize);
-        return () => {
-          window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
-    useEffect(() => {
         if (promptRef.current) {
             promptRef.current.style.height = 'auto';
             promptRef.current.style.height = promptRef.current.scrollHeight + 'px';
         }
     }, [customPrompt]);
-    
+
     async function saveAndRedirect(inputText, outputText) {
         const newArticle = await fetch('/api/create_article/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 submit_text: inputText,
                 edited_text: outputText,
                 custom_prompt: customPrompt
@@ -72,8 +61,8 @@ export default function Uploader() {
         window.location.href = '/workshop/' + id.articleId
     };
 
-    function leftExpand(event) {
-        setLeftPanelExpanded(leftPanelExpanded == true ? false : true)
+    function toggleLeftPanel() {
+        setLeftPanelExpanded(expanded => !expanded)
     }
     function handlePromptChange(event) {
         setCustomPrompt(event.target.value)
@@ -87,26 +76,23 @@ export default function Uploader() {
     }
 
     return (
-        <div className="page-content">    
+        <div className="page-content">
             <div className="pageRow">
-                <div className="pageLeftExpand" onClick={leftExpand} style={leftPanelExpanded ? {visibility:'hidden'} : {visibility: 'visible'}}>
-                    <FaAnglesRight style={{fontSize:'30px'}} />    
-                </div>
-                <div id="panelClose" onClick={leftExpand}>
-                    <FaArrowLeft style={{fontSize:'30px'}} />
-                </div>
-                <div id="pageLeft" className="pageLeft" 
-                    style={{
-                        visibility:(windowExpanded ? 'visible' : (leftPanelExpanded ? 'visible' : 'hidden'))
-                    }}>
+                {/* Only visible in the narrow layout; CSS hides it on desktop */}
+                <button type="button" className="menuToggle" aria-label="Open menu" aria-expanded={leftPanelExpanded} onClick={toggleLeftPanel}>
+                    <FaBars />
+                </button>
+
+                <div id="pageLeft" className={leftPanelExpanded ? 'pageLeft pageLeft--open' : 'pageLeft'}>
+                    <button type="button" className="panelClose" aria-label="Close menu" onClick={toggleLeftPanel}>
+                        <FaXmark />
+                    </button>
                     <div style={{marginBottom:"20px"}}>
-                      <WorkshopTable embedded style={{
-                        visibility:(windowExpanded ? 'visible' : (leftPanelExpanded ? 'visible' : 'hidden'))
-                        }} />  
+                        <WorkshopTable embedded />
                     </div>
                 </div>
 
-                <div className="pageRight" style={{visibility:(windowExpanded ? 'visible' : (leftPanelExpanded ? 'hidden' : 'visible'))}}>
+                <div className="pageRight">
                     {formVisible && (
                         <form id="copyeditForm" method="post" onSubmit={fetchStream} encType="multipart/form-data">
                             <div className="form-group">
@@ -118,7 +104,7 @@ export default function Uploader() {
                                 <textarea id="copyeditText" className="auto-grow copyedit-textarea" onInput={handleTextareaResize} name="text_box" required></textarea>
                             </div>
                             <div>
-                                <button className="btn btn-dark" type="submit" name="submitCopyedit" value="submitCopyedit">Submit text</button>    
+                                <button className="btn btn-dark" type="submit" name="submitCopyedit" value="submitCopyedit">Submit text</button>
                             </div>
                         </form>
                     )}

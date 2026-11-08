@@ -1,35 +1,130 @@
-import React, { useState, useEffect,  } from 'react'
+import React, { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import WorkshopTable from './WorkshopTable'
 import '../css/articleStyle.css'
 import { FaRegCopy, FaRegSave } from "react-icons/fa";
 
 
+// textContent gives back the unescaped characters, so re-escape to keep every segment's
+// html string safe to re-render
+function escapeHtml(text) {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
+// create_html sends a flat run of <span>/<del>/<ins> siblings. A <del> immediately followed by
+// an <ins> is one change with both sides; any other <del> or <ins> is a one-sided change.
+function parseMarkupToSegments(html) {
+  const doc = new DOMParser().parseFromString('<div>' + html + '</div>', 'text/html')
+  const nodes = Array.from(doc.body.firstChild.childNodes)
+  const segments = []
+  let staticHtml = ''
+  let staticCount = 0
+  let changeCount = 0
+
+  function flushStatic() {
+    if (!staticHtml) return
+    segments.push({ type: 'static', id: 's' + staticCount++, html: staticHtml })
+    staticHtml = ''
+  }
+
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i]
+    const isDel = node.nodeName === 'DEL'
+    const isIns = node.nodeName === 'INS'
+    if (!isDel && !isIns) {
+      staticHtml += node.nodeType === Node.TEXT_NODE ? escapeHtml(node.textContent) : node.outerHTML
+      continue
+    }
+    const paired = isDel && nodes[i + 1] && nodes[i + 1].nodeName === 'INS'
+    flushStatic()
+    segments.push({
+      type: 'change',
+      id: 'c' + changeCount++,
+      del: isDel ? node.innerHTML : null,
+      ins: isIns ? node.innerHTML : (paired ? nodes[i + 1].innerHTML : null),
+      status: 'pending'
+    })
+    if (paired) i++
+  }
+  flushStatic()
+  return segments
+}
+
+// sideForPending picks which side an undecided change contributes: 'ins' for the edited text,
+// 'del' for the original text. Decided changes read the same either way.
+function buildHtml(segments, sideForPending) {
+  return segments.map(seg => {
+    if (seg.type === 'static') return seg.html
+    if (seg.status === 'accepted') return seg.ins || ''
+    if (seg.status === 'rejected') return seg.del || ''
+    return seg[sideForPending] || ''
+  }).join('')
+}
+
+function htmlToText(html) {
+  const container = document.createElement('div')
+  container.innerHTML = html.replace(/<br\s*\/?>/gi, '\n')
+  return container.textContent
+}
+
+function Change({ seg, isSelected, onSelect, registerRef }) {
+  const setRef = useCallback(node => registerRef(seg.id, node), [registerRef, seg.id])
+
+  if (seg.status === 'accepted') {
+    return seg.ins ? <span dangerouslySetInnerHTML={{__html: seg.ins}}></span> : null
+  }
+  if (seg.status === 'rejected') {
+    return seg.del ? <span dangerouslySetInnerHTML={{__html: seg.del}}></span> : null
+  }
+
+  function handleClick(event) {
+    event.stopPropagation()
+    onSelect(seg.id)
+  }
+
+  return (
+    <>
+      {seg.del &&
+        <del ref={setRef} className={isSelected ? 'del-selected' : ''} onClick={handleClick}
+          dangerouslySetInnerHTML={{__html: seg.del}}></del>}
+      {seg.ins &&
+        <ins ref={seg.del ? null : setRef} className={isSelected ? 'ins-selected' : ''} onClick={handleClick}
+          dangerouslySetInnerHTML={{__html: seg.ins}}></ins>}
+    </>
+  )
+}
+
 export default function Article() {
   const { id } = useParams()
-  const [content, setContent] = useState([])
-  const [originalText, setOriginalText] = useState([])
+  const [segments, setSegments] = useState([])
+  const [originalText, setOriginalText] = useState('')
   const [date, setDate] = useState()
-  const [selectedNode, setSelectedNode] = useState()
+  const [selectedChangeId, setSelectedChangeId] = useState(null)
   const [undoStack, setUndoStack] = useState([])
   const [view, setView] = useState('markup')
-  const [finalEdit, setFinalEdit] = useState(null)
-  
+  const [popupPosition, setPopupPosition] = useState(null)
+
   //not sure if these need to be set in state, since they never change.
   //may want to have a separate fetch function.
   const [prompt, setPrompt] = useState()
 
+  // id -> the rendered node of each pending change, used for scrolling and panel placement only
+  const changeRefs = useRef({})
+  const registerChangeRef = useCallback((changeId, node) => {
+    if (node) changeRefs.current[changeId] = node
+    else delete changeRefs.current[changeId]
+  }, [])
 
   useEffect(() => {
       async function fetchData() {
           try {
               const response = await fetch('/api/get_article/' + id)
               const data = await response.json()
-              
+
               // <br> tags are added into markup by diff-match-patch, but Original text just comes straight from what the user submitted
               // so we are adding them here. Probably need a more concise way of applying uniform formatting in server-side code.
               const ogText = data.originalText.replace(/\n/g, '<br><br>');
-              setContent(data.htmlChanges)
+              setSegments(parseMarkupToSegments(data.htmlChanges || ''))
               setOriginalText(ogText)
               setDate(data.submitDate)
               setPrompt(data.customPrompt)
@@ -37,217 +132,75 @@ export default function Article() {
               console.error('Error:', error)
           }
       }
+      setSelectedChangeId(null)
+      setUndoStack([])
       fetchData()
   }, [id])
 
-  function processFinalText() {
-    let currentEdit = document.createElement('div')
-    currentEdit.innerHTML = document.querySelector('.markupDisplay').innerHTML
-    let remainingDeletes = currentEdit.querySelectorAll('DEL')
-    remainingDeletes.forEach(del => del.remove())
-    let inserts = currentEdit.querySelectorAll('INS')
-    inserts.forEach(ins => {
-      let newNode = document.createElement('SPAN')
-      newNode.innerHTML = ins.innerHTML
-      ins.parentNode.replaceChild(newNode, ins)
-    })
-    return(currentEdit.innerHTML)
+  const pendingChanges = useMemo(
+    () => segments.filter(seg => seg.type === 'change' && seg.status === 'pending'),
+    [segments]
+  )
+
+  const finalEditHtml = useMemo(() => buildHtml(segments, 'ins'), [segments])
+
+  useLayoutEffect(() => {
+    const node = selectedChangeId ? changeRefs.current[selectedChangeId] : null
+    setPopupPosition(node ? { top: node.offsetTop + 25, left: node.offsetLeft } : null)
+  }, [selectedChangeId, view])
+
+  function setChangeStatus(changeId, status) {
+    setSegments(current => current.map(seg => seg.id === changeId ? { ...seg, status } : seg))
   }
 
-  function handleDocumentClick(event) {
-    if (event.target.nodeName == 'INS' || event.target.nodeName == 'DEL') {
-      selectNode(event.target)
-    } else if (event.target.id == 'acceptRemaining') {
-      acceptRemaining()
-    } else if (event.target.id == 'nextChange') {
-      nextChange()
-    } else if (event.target.id == 'previousChange') {
-      previousChange()
-    } else if (event.target.id == 'markup') {
-      setView('markup') 
-    } else if (event.target.id == 'sideCompare') {
-      setFinalEdit(processFinalText())
-      setView('sideCompare')
-    }
-      else if (event.target.id == 'finalEdit') {
-      setFinalEdit(processFinalText())
-      setView('finalEdit')
-    } else if (event.target.id == 'submissionDetails') {
-      setView('submissionDetails')
-    } else {
-      if (selectedNode) {
-        if (selectedNode.ins) selectedNode.ins.className = ''
-        if (selectedNode.del) selectedNode.del.className = ''
-        setSelectedNode(null)
-      }
-    }
-  }
-
-  function copyFinalEdit() {
-    let copiedText = document.createElement('div')
-    copiedText.innerHTML = processFinalText().replace(/<br>/g, '\n');
-    navigator.clipboard.writeText(copiedText.innerText)
-  }
-
-  function saveChanges() {
-    const markupHtml = document.querySelector('.markupDisplay').innerHTML
-    //clean original
-    let originalText = document.createElement('div')
-    originalText.innerHTML = markupHtml
-    const remainingInserts = originalText.querySelectorAll('INS')
-    remainingInserts.forEach(ins => ins.remove())
-      
-    //clean edit side
-    let editedText = document.createElement('div')
-    editedText.innerHTML = markupHtml
-    const remainingDeletes = editedText.querySelectorAll('DEL')
-    remainingDeletes.forEach(del => del.remove())
-    fetch('/api/save_article/' + id, {
-      method: 'UPDATE',
-      headers : {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-        updated_og_text: originalText.innerText,
-        updated_edited_text: editedText.innerText
-      })
-    })
-  }
-
-  async function selectNode(thisNode) {
-    let delNode = null
-    let insNode = null
-    
-    if (selectedNode) {
-      if (selectedNode.ins) selectedNode.ins.className = ''
-      if (selectedNode.del) selectedNode.del.className = ''
-    }
-    if (thisNode.nodeName == 'DEL') {
-      thisNode.className = 'del-selected'
-      delNode = thisNode
-      if (thisNode.nextElementSibling !== null && thisNode.nextElementSibling.nodeName == 'INS') {
-        insNode = thisNode.nextElementSibling
-      }
-    }
-    if (thisNode.nodeName == 'INS') {
-      thisNode.className = 'ins-selected'
-      insNode = thisNode
-      if (thisNode.previousElementSibling !== null && thisNode.previousElementSibling.nodeName == 'DEL') {
-        delNode = thisNode.previousElementSibling
-      }
-    }
-    setSelectedNode({
-      'anchor': (delNode ? delNode : insNode).previousElementSibling,
-      'del': delNode,
-      'ins': insNode,
-    })
-  }
-
-  function nextChange() {
-    let change = null
-    if (selectedNode) {
-      change = (selectedNode.del ? selectedNode.del : selectedNode.ins)
-    }
-    if (!selectedNode) {
-      change = document.querySelector('DEL, INS')
-      selectNode(change)
-      change.scrollIntoView({block: 'center', inline: 'nearest'})
-      return
-    }
-    change.nextElementSibling.nodeName !== 'INS' ? change = change.nextElementSibling : change = change.nextElementSibling.nextElementSibling
-    while (change && change.nodeName !== 'DEL' && change.nodeName !== 'INS') {
-      change = change.nextElementSibling
-    }
-    selectNode(change)
-    change.scrollIntoView({block: 'center', inline: 'nearest'})
-  }
-
-  function previousChange() {
-    let change = null
-    if (selectedNode) {
-      change = (selectedNode.del ? selectedNode.del : selectedNode.ins)
-    }
-    if (!change) {
-      const changes = document.querySelectorAll('DEL, INS')
-      change = changes[changes.length - 1]
-    }
-    change.previousElementSibling.nodeName !== 'DEL' ? change = change.previousElementSibling : change = change.previousElementSibling.previousElementSibling
-    while (change && change.nodeName !== 'DEL' && change.nodeName !== 'INS') {
-      change = change.previousElementSibling
-    }
-    selectNode(change)
-    change.scrollIntoView({block: 'center', inline: 'nearest'})
-  }
-
-  function acceptRemaining() {
-    const deletes = document.querySelectorAll('DEL')
-    deletes.forEach(del => del.remove())
-    const inserts = document.querySelectorAll('INS')
-    inserts.forEach(ins => {
-      let newNode = document.createElement('SPAN')
-      newNode.innerHTML = ins.innerHTML
-      ins.parentNode.replaceChild(newNode, ins)
-    })
+  function decide(status) {
+    if (!selectedChangeId) return
+    setUndoStack(current => [...current, { id: selectedChangeId, previousStatus: 'pending' }])
+    setChangeStatus(selectedChangeId, status)
+    setSelectedChangeId(null)
   }
 
   function undo() {
-    const undoItem = undoStack.slice(-1)[0]
+    const undoItem = undoStack[undoStack.length - 1]
     if (!undoItem) return
-    if (undoItem.type == 'accept') {
-      if (undoItem.ins) {
-        let newNode = document.createElement('INS')
-        newNode.innerHTML = undoItem.ins.innerHTML
-        undoItem.anchor.parentNode.replaceChild(newNode, undoItem.anchor.nextElementSibling)
-      }
-      if (undoItem.del) {
-        undoItem.anchor.after(undoItem.del)
-      }
-    }
-    if (undoItem.type == 'reject') {
-      if (undoItem.del) {
-        let newNode = document.createElement('DEL')
-        newNode.innerHTML = undoItem.del.innerHTML
-        undoItem.anchor.parentNode.replaceChild(newNode, undoItem.anchor.nextElementSibling)
-      }
-      if (undoItem.ins && undoItem.del) {
-        undoItem.anchor.nextElementSibling.after(undoItem.ins)
-      } else if (undoItem.ins) {
-        undoItem.anchor.after(undoItem.ins)
-      }
-    }
-    popStack()
+    setChangeStatus(undoItem.id, undoItem.previousStatus)
+    setUndoStack(current => current.slice(0, -1))
+    setSelectedChangeId(null)
   }
 
-  function addToStack(type) {
-    setUndoStack(currentStack => [
-      ...currentStack, {
-        ...selectedNode,
-        'type': type
-      }
-    ])
+  function acceptRemaining() {
+    setSegments(current => current.map(seg =>
+      seg.type === 'change' && seg.status === 'pending' ? { ...seg, status: 'accepted' } : seg
+    ))
+    setSelectedChangeId(null)
   }
 
-  function popStack() {
-    setUndoStack(currentStack => currentStack.slice(0, currentStack.length - 1))
+  function goToChange(offset) {
+    if (pendingChanges.length === 0) return
+    const index = pendingChanges.findIndex(seg => seg.id === selectedChangeId)
+    const target = index === -1
+      ? pendingChanges[offset > 0 ? 0 : pendingChanges.length - 1]
+      : pendingChanges[(index + offset + pendingChanges.length) % pendingChanges.length]
+    setSelectedChangeId(target.id)
+    const node = changeRefs.current[target.id]
+    if (node) node.scrollIntoView({block: 'center', inline: 'nearest'})
   }
 
-  function accept() {
-    addToStack('accept')
-    if (selectedNode.ins) {
-      let newNode = document.createElement('SPAN')
-      newNode.innerHTML = selectedNode.ins.innerHTML
-      selectedNode.ins.parentNode.replaceChild(newNode, selectedNode.ins)        
-    }
-    if (selectedNode.del) selectedNode.del.remove()
+  function copyFinalEdit() {
+    navigator.clipboard.writeText(htmlToText(finalEditHtml))
   }
-  function reject() {
-    addToStack('reject')
-    if (selectedNode.del) {
-      let newNode = document.createElement('SPAN')
-      newNode.innerHTML = selectedNode.del.innerHTML
-      selectedNode.del.parentNode.replaceChild(newNode, selectedNode.del)        
-    }
-    if (selectedNode.ins) selectedNode.ins.remove()
+
+  function saveChanges() {
+    fetch('/api/save_article/' + id, {
+      method: 'PATCH',
+      headers : {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        updated_og_text: htmlToText(buildHtml(segments, 'del')),
+        updated_edited_text: htmlToText(buildHtml(segments, 'ins'))
+      })
+    })
   }
 
   return (
@@ -255,33 +208,39 @@ export default function Article() {
       <div className='articleSidePanel'>
         <WorkshopTable embedded activeId={id} />
       </div>
-      <div className='articleMain' onClick={(event) => handleDocumentClick(event)}>
+      <div className='articleMain'>
         <div className='articleViews'>
-          <button id='markup' className={'articleTab articlePanelButton' + (view == 'markup' ? ' tabSelected' : '')}>Markup</button>
-          <button id='finalEdit' className={'articleTab articlePanelButton' + (view == 'finalEdit' ? ' tabSelected' : '')}>Final Edit</button>
-          <button id='sideCompare' className={'articleTab articlePanelButton' + (view == 'sideCompare' ? ' tabSelected' : '')}>Side-by-Side</button>
-          <button id='submissionDetails' className={'articleTab articlePanelButton' + (view == 'submissionDetails' ? ' tabSelected' : '')}>Submission Details</button>
+          <button id='markup' className={'articleTab articlePanelButton' + (view === 'markup' ? ' tabSelected' : '')} onClick={() => setView('markup')}>Markup</button>
+          <button id='finalEdit' className={'articleTab articlePanelButton' + (view === 'finalEdit' ? ' tabSelected' : '')} onClick={() => setView('finalEdit')}>Final Edit</button>
+          <button id='sideCompare' className={'articleTab articlePanelButton' + (view === 'sideCompare' ? ' tabSelected' : '')} onClick={() => setView('sideCompare')}>Side-by-Side</button>
+          <button id='submissionDetails' className={'articleTab articlePanelButton' + (view === 'submissionDetails' ? ' tabSelected' : '')} onClick={() => setView('submissionDetails')}>Submission Details</button>
         </div>
         <div className='editTools'>
-          <button id='previousChange' className='articleButton articlePanelButton'>Previous Change</button>
-          <button id='nextChange' className='articleButton articlePanelButton'>Next Change</button>
+          <button id='previousChange' className='articleButton articlePanelButton' onClick={() => goToChange(-1)}>Previous Change</button>
+          <button id='nextChange' className='articleButton articlePanelButton' onClick={() => goToChange(1)}>Next Change</button>
           <button id={undoStack.length > 0 ? null : 'undo-inactive'} className='articleButton articlePanelButton' onClick={undo}>Undo</button>
-          <button id='acceptRemaining' className='articleButton articlePanelButton'>Accept Remaining Changes</button>
+          <button id='acceptRemaining' className='articleButton articlePanelButton' onClick={acceptRemaining}>Accept Remaining Changes</button>
           <button id='copyFinalEdit' className='articleButton articlePanelButton' onClick={copyFinalEdit}><FaRegCopy /></button>
-          <button id='save' className='articleButton articlePanelButton'><FaRegSave onClick={saveChanges} /></button>
+          <button id='save' className='articleButton articlePanelButton' onClick={saveChanges}><FaRegSave /></button>
         </div>
-        <div className='articleContent'>
+        <div className='articleContent' onClick={() => setSelectedChangeId(null)}>
           <div className='articleText'>
-            <div className='originalDisplay' style={{display:(view == 'sideCompare' ? 'block' : 'none')}}>
+            <div className='originalDisplay' style={{display:(view === 'sideCompare' ? 'block' : 'none')}}>
               <p dangerouslySetInnerHTML={{__html: originalText}}></p>
             </div>
-            <div className='markupDisplay' style={{display:(view == 'markup' ? 'block' : 'none')}}>
-              <p dangerouslySetInnerHTML={{__html: content}}></p>
+            <div className='markupDisplay' style={{display:(view === 'markup' ? 'block' : 'none')}}>
+              <p>
+                {segments.map(seg => seg.type === 'static'
+                  ? <span key={seg.id} dangerouslySetInnerHTML={{__html: seg.html}}></span>
+                  : <Change key={seg.id} seg={seg} isSelected={seg.id === selectedChangeId}
+                      onSelect={setSelectedChangeId} registerRef={registerChangeRef} />
+                )}
+              </p>
             </div>
-            <div className='finalEditDisplay' style={{display: (view == 'finalEdit' ? 'block' : (view == 'sideCompare' ? 'block' : 'none'))}}>
-              <p dangerouslySetInnerHTML={{__html: finalEdit}}></p>
+            <div className='finalEditDisplay' style={{display: (view === 'finalEdit' || view === 'sideCompare' ? 'block' : 'none')}}>
+              <p dangerouslySetInnerHTML={{__html: finalEditHtml}}></p>
             </div>
-            <div className='submissionDetailsDisplay' style={{display:(view == 'submissionDetails' ? 'block' : 'none')}}>
+            <div className='submissionDetailsDisplay' style={{display:(view === 'submissionDetails' ? 'block' : 'none')}}>
               <p><b>Submission Time</b><br/>{date}</p>
               {prompt != "" &&
                 <p><b>Prompt</b><br/>{prompt}</p>
@@ -289,14 +248,14 @@ export default function Article() {
             </div>
           </div>
         </div>
-          {selectedNode &&
+          {view === 'markup' && popupPosition &&
           <div className='nodePanel' style={{position: 'absolute',
-            top: (selectedNode.del ? selectedNode.del.offsetTop : selectedNode.ins.offsetTop) + 25,
-            left: (selectedNode.del ? selectedNode.del.offsetLeft : selectedNode.ins.offsetLeft),
+            top: popupPosition.top,
+            left: popupPosition.left,
             display: 'inline-flex'
           }}>
-              <button className='articleButton reject' onClick={reject}>Reject</button>
-              <button className='articleButton accept' onClick={accept}>Accept</button>
+              <button className='articleButton reject' onClick={() => decide('rejected')}>Reject</button>
+              <button className='articleButton accept' onClick={() => decide('accepted')}>Accept</button>
         </div>}
       </div>
     </div>

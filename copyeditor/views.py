@@ -148,7 +148,7 @@ def get_article(request, id):
     
 @csrf_exempt
 def save_article(request, id):
-    if request.method == 'UPDATE':
+    if request.method == 'PATCH':
 
         article = Archive.objects.get(id=id)
         if article.user.id == request.user.id:

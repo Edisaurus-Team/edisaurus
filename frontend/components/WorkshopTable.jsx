@@ -45,6 +45,13 @@ export default function Table ({ embedded = false, activeId } = {}) {
 
   const tableElement = (
     <table className={embedded ? 'workshop-table-embedded' : undefined}>
+      {embedded && (
+        <colgroup>
+          <col />
+          <col />
+          <col />
+        </colgroup>
+      )}
       <thead>
         <tr>
           <th>Your Articles</th>
@@ -59,7 +66,7 @@ export default function Table ({ embedded = false, activeId } = {}) {
           </td>
           {/* TRASH CAN */}
           <td>
-            <div className="trash-can red-hover spaced-15px padded-10px">
+            <div className="trash-can spaced-15px padded-10px">
               <div
                 className={article.id === clickedIcon.id ? "trash-wrapper selected" : "trash-wrapper"}
                 onClick={() => handleTrashIconClick(article.id)}

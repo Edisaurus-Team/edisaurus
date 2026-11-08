@@ -49,6 +49,27 @@ td:nth-child(3) {
 .check-icon:hover {
     color:red;
 }
+
+/* Trash button: centers the icon and shows a hover highlight */
+.trash-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.trash-wrapper:hover {
+    background-color: rgb(255, 160, 160);
+    outline: 2px solid green;
+}
+
+.trash-wrapper .trash-icon {
+    display: block;
+    height: 24px;
+}
   
 #edit-icon {
     visibility: hidden;
@@ -69,6 +90,14 @@ td:nth-child(3) {
 
 .workshop-table-embedded {
     width: 100%;
+    table-layout: fixed;
+}
+/* Title column is 200px; the two icon columns split whatever width is left */
+.workshop-table-embedded col:nth-child(1) {
+    width: 200px;
+}
+.workshop-table-embedded col:nth-child(n+2) {
+    width: calc((100% - 200px) / 2);
 }
 .workshop-table-embedded tr {
     font-size: 14px;
